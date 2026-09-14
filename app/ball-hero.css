@@ -232,30 +232,39 @@
   .ball-leverage{position:relative;top:auto;translate:none;margin:0 auto;padding:0 24px}
 }
 
-/* --- the problem, as a picture ------------------------------------------- */
-/* A week of hours going dark. Everything reads --leverage, the same
-   position-derived value the panel's own fade uses, so the week empties again
-   on the way back up. No transitions: the scroll is the timeline. */
-.hours{margin:26px 0 0}
-.hours-cap,.hours-tags{font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.16em;
+/* --- the promise, as a picture ------------------------------------------
+   Four blocks are the team and never move; thirty-six more fill in behind
+   them. Everything reads --leverage, the same position-derived value the
+   panel's own fade uses, so the capacity drains again on the way back up. */
+.grow{margin:26px 0 0}
+.grow-cap,.grow-tags{font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.16em;
   text-transform:uppercase;color:var(--muted)}
-.hours-cap{margin:0 0 12px}
-.hours-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;max-width:392px}
-.hours-cell{position:relative;aspect-ratio:1;border-radius:4px;background:#c3d0ea}
-/* One block fills when the week has run past its place in the queue. The 46 is
-   a touch over the 36 blocks that fill, so the last one is solid before the
-   phase ends rather than exactly on it. */
-.hours-cell::after{content:'';position:absolute;inset:0;border-radius:4px;background:var(--ink-2);
+.grow-cap{display:flex;align-items:center;gap:12px;margin:0 0 10px}
+.grow-cap-2{margin-top:18px}
+/* The four that stand for the people: a different colour from the output
+   blocks, because they are the thing that does not change. */
+.grow-team{display:flex;gap:5px}
+.grow-team i{width:13px;height:13px;border-radius:3px;background:var(--accent-2)}
+/* The multiplier is the punchline, so it only arrives once the grid has. */
+.grow-x{font-size:13px;letter-spacing:.06em;color:var(--ink);
+  opacity:clamp(0,calc(var(--leverage) * 5 - 3.6),1)}
+.grow-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;max-width:392px}
+.grow-cell{position:relative;aspect-ratio:1;border-radius:4px;background:#c3d0ea}
+/* A block lights when the run has passed its place in the queue. The 46 is a
+   touch over the 36 that fill, so the last one is solid before the phase ends
+   rather than exactly on it. -1 is lit from the first frame. */
+.grow-cell::after{content:'';position:absolute;inset:0;border-radius:4px;background:var(--ink-2);
   opacity:clamp(0,calc(var(--leverage) * 46 - var(--o)),1)}
-.hours-tags{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 0;padding:0}
-.hours-tags li{padding:6px 11px;border-radius:999px;background:var(--ink-2);color:#fff;
+.grow-tags{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 0;padding:0}
+.grow-tags li{padding:6px 11px;border-radius:999px;background:var(--ink-2);color:#fff;
   letter-spacing:.12em;opacity:clamp(0,calc(var(--leverage) * 4 - var(--t)),1)}
 @media (max-width:900px){
   /* Left to fill the column the blocks become huge and shove the headline up
-     under the nav. A week is a week at any size. */
-  .hours-grid{max-width:288px;gap:5px}
-  .hours{margin-top:18px}
-  .hours-tags{gap:6px;margin-top:12px}
-  .hours-tags li{padding:5px 9px}
+     under the nav. A week's output is legible at any size. */
+  .grow-grid{max-width:288px;gap:5px}
+  .grow{margin-top:18px}
+  .grow-cap-2{margin-top:14px}
+  .grow-tags{gap:6px;margin-top:12px}
+  .grow-tags li{padding:5px 9px}
   .ball-note{font-size:14px !important;margin-top:16px !important}
 }

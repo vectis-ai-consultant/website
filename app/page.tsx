@@ -3,7 +3,7 @@ import Nav from '@/components/Nav'
 import ProgressBar from '@/components/ProgressBar'
 import BookingFlow from '@/components/BookingFlow'
 import ContactFlow from '@/components/ContactFlow'
-import HoursGrid from '@/components/HoursGrid'
+import OutputGrid from '@/components/OutputGrid'
 import ProcessRail from '@/components/ProcessRail'
 import ScrollHook from '@/components/ScrollHook'
 import HomeBehaviors from '@/components/HomeBehaviors'
@@ -84,11 +84,11 @@ export default function HomePage() {
             </div>
 
             <div className="ball-leverage">
-              <h2>Every tool already exists.<br /><em>The hours don&rsquo;t.</em></h2>
+              <h2>Grow the output.<br /><em>Not the headcount.</em></h2>
               {/* The three bullets that used to sit here are the labels on the
-                  grid now: the week filling up says it faster than they did. */}
-              <HoursGrid />
-              <p className="ball-note">The work that repeats takes the week. The work that compounds waits.</p>
+                  grid now: four blocks becoming forty says it faster. */}
+              <OutputGrid />
+              <p className="ball-note">The same people, with the repeat work running itself &mdash; so the team you have is the team you scale on.</p>
             </div>
             </div>
           </section>
