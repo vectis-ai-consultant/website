@@ -3,6 +3,7 @@ import Nav from '@/components/Nav'
 import ProgressBar from '@/components/ProgressBar'
 import BookingFlow from '@/components/BookingFlow'
 import ProcessRail from '@/components/ProcessRail'
+import ScrollHook from '@/components/ScrollHook'
 import HomeBehaviors from '@/components/HomeBehaviors'
 import StoryScene from '@/components/StoryScene'
 import './home.css'
@@ -78,12 +79,12 @@ export default function HomePage() {
             </div>
 
             <div className="ball-leverage">
-              <h2>You bring the ambition.<br /><em>We bring the leverage.</em></h2>
-              <p>Your people, your tools, more room to move. We build AI into the systems you already operate — no migration, no new logins.</p>
+              <h2>Every tool already exists.<br /><em>The hours don&rsquo;t.</em></h2>
+              <p>Your team is not short of software. It is short of the time to run it &mdash; so the work that compounds keeps losing to the work that repeats.</p>
               <ol className="ball-steps">
-                <li><b>01</b> Start with the tools you already run</li>
-                <li><b>02</b> Add the AI that earns its place</li>
-                <li><b>03</b> Lift what your team can reach</li>
+                <li><b>01</b> Follow-ups go out late, or not at all</li>
+                <li><b>02</b> Quotes take a day, so people go elsewhere</li>
+                <li><b>03</b> Content only happens when someone makes room</li>
               </ol>
             </div>
             </div>
@@ -92,9 +93,9 @@ export default function HomePage() {
           <section id="orbit" className="orbit-stage">
             <div className="act-sticky">
               <div className="act-copy orbit-copy">
-                <span className="act-num">02 — THE PROBLEM</span>
-                <h2>Every tool already exists.<br /><em>The hours don&rsquo;t.</em></h2>
-                <p>Your team is not short of software. It is short of the time to run it &mdash; so the follow-ups go late, the quotes take a day, and the content only happens when someone makes room for it.</p>
+                <span className="act-num">02 — WHAT WE DO ABOUT IT</span>
+                <h2>You bring the ambition.<br /><em>We bring the leverage.</em></h2>
+                <p>Your people, your tools, more room to move. We build AI into the systems you already operate &mdash; no migration, no new logins, nothing for your team to learn first.</p>
               </div>
             </div>
           </section>
@@ -130,10 +131,12 @@ export default function HomePage() {
             </section>
           )}
 
+          <ScrollHook eyebrow="SO WHAT DO WE ACTUALLY BUILD" line="Four ways to buy back the hours the work keeps eating." />
+
           <section id="services" data-reveal="1" style={{ padding: '60px 56px 40px', maxWidth: '1200px', margin: '0 auto', scrollMarginTop: '110px' }}>
             <div style={{ display: 'flex', alignItems: 'flex-end', gap: '28px', marginBottom: '28px' }}>
               <span data-num="1" style={{ fontSize: '120px', fontWeight: '300', lineHeight: '.8', color: '#dbe3f3', fontFamily: 'Georgia,serif', letterSpacing: '-.02em' }}>01</span>
-              <span style={{ fontSize: '13px', letterSpacing: '.18em', color: '#1a1740', fontWeight: '600', paddingBottom: '6px' }}>WHAT WE BUILD</span>
+              <span style={{ fontSize: '13px', letterSpacing: '.18em', color: '#1a1740', fontWeight: '600', paddingBottom: '6px' }}>OUR SOLUTION</span>
             </div>
             <h2 id="servicesHead" style={{ fontSize: '52px', fontWeight: '700', letterSpacing: '-.025em', lineHeight: '1.08', margin: '0 0 80px', maxWidth: '760px', textWrap: 'pretty' }}>Four ways we bring AI into your business.</h2>
             <div id="servicesGrid" data-stagger="1" style={{ display: 'grid', gridTemplateColumns: '1fr 1.25fr', gap: '64px', alignItems: 'start' }}>
@@ -270,14 +273,18 @@ export default function HomePage() {
             </div>
           </section>
 
+          <ScrollHook eyebrow="AND HOW DOES IT GET BUILT" line="Four steps, so you know what you are agreeing to before you agree to it." />
+
           <ProcessRail />
+
+          <ScrollHook eyebrow="AND WHAT DOES IT TAKE TO START" line="Nothing. It connects to the tools you already run." />
 
           <section id="integration" data-reveal="1" style={{ padding: '0 56px 40px', maxWidth: '1200px', margin: '0 auto', scrollMarginTop: '110px' }}>
             <div style={{ display: 'flex', alignItems: 'flex-end', gap: '28px', marginBottom: '28px' }}>
               <span data-num="1" style={{ fontSize: '120px', fontWeight: '300', lineHeight: '.8', color: '#dbe3f3', fontFamily: 'Georgia,serif', letterSpacing: '-.02em' }}>03</span>
-              <span style={{ fontSize: '13px', letterSpacing: '.18em', color: '#1a1740', fontWeight: '600', paddingBottom: '6px' }}>INTEGRATION</span>
+              <span style={{ fontSize: '13px', letterSpacing: '.18em', color: '#1a1740', fontWeight: '600', paddingBottom: '6px' }}>DAY ONE READINESS</span>
             </div>
-            <h2 style={{ fontSize: '36px', fontWeight: '700', letterSpacing: '-.02em', lineHeight: '1.15', margin: '0 0 14px', maxWidth: '640px', textWrap: 'pretty' }}>It plugs into what you already run. From day zero.</h2>
+            <h2 style={{ fontSize: '36px', fontWeight: '700', letterSpacing: '-.02em', lineHeight: '1.15', margin: '0 0 14px', maxWidth: '640px', textWrap: 'pretty' }}>Connected to everything you already run, on day one.</h2>
             <p style={{ fontSize: '17px', color: '#4a4f70', lineHeight: '1.65', margin: '0 0 40px', maxWidth: '560px', textWrap: 'pretty' }}>From the CRM your team lives in down to the model layer underneath, we build into the systems you already operate. Nothing to migrate, no new logins, nothing for your team to learn first &mdash; it works on the day it lands.</p>
             <div id="howGrid" data-stagger="1" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,minmax(0,1fr))', gap: '1px', background: '#cdd8ee', border: '1px solid #cdd8ee', maxWidth: '900px', margin: '0 auto' }}>
               <div data-tools-cell="1" style={{ background: '#f2f5fb', padding: '26px 0 30px', transition: 'background .3s', minWidth: '0', overflow: 'hidden' }} className="hv4">

@@ -224,3 +224,26 @@ h2[data-words][data-in] span{opacity:1;transform:none}
   .rail-card-inline{display:block}
 }
 @media (prefers-reduced-motion:reduce){.rail-step{opacity:1}}
+
+/* ── Between sections ─────────────────────────────────────────────────────────
+   A held beat: a rule dropping in from above, one line saying why the next
+   section exists, and a cue that keeps the eye moving down the page. */
+.scroll-hook{display:flex;flex-direction:column;align-items:center;text-align:center;
+  padding:82px 24px 74px;max-width:620px;margin:0 auto;position:relative;z-index:2}
+.scroll-hook-rule{width:1px;height:64px;margin-bottom:30px;
+  background:linear-gradient(180deg,rgba(58,79,174,0),rgba(58,79,174,.45));
+  transform-origin:top;animation:hookRule 1s cubic-bezier(.2,.7,.2,1) both}
+.scroll-hook-eyebrow{font-family:ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:.18em;
+  text-transform:uppercase;color:#7b83a8;margin-bottom:16px}
+.scroll-hook p{font-size:clamp(20px,2vw,26px);font-weight:600;letter-spacing:-.015em;line-height:1.35;
+  color:#1a1740;margin:0;text-wrap:pretty}
+/* Drawn rather than typed, so it stays a cue and not another arrow glyph. */
+.scroll-hook-cue{width:10px;height:10px;margin-top:30px;border-right:1.5px solid #3a4fae;
+  border-bottom:1.5px solid #3a4fae;rotate:45deg;animation:hookCue 2.1s ease-in-out infinite}
+@keyframes hookRule{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes hookCue{0%,100%{transform:translateY(-3px);opacity:.45}50%{transform:translateY(3px);opacity:1}}
+@media (max-width:900px){.scroll-hook{padding:56px 22px 50px}.scroll-hook-rule{height:44px}}
+@media (prefers-reduced-motion:reduce){
+  .scroll-hook-rule,.scroll-hook-cue{animation:none}
+  .scroll-hook-rule{transform:none}
+}

@@ -48,16 +48,18 @@ export function ballState(progress: number) {
 export function orbitState(progress: number) {
   const p = clamp(progress)
   return {
-    centre: smooth(p / 0.22),       // the ball comes back from its side-by-side spot
-    // and the camera goes all the way in behind it: the shell fills the frame
-    // and the V inside it is the only thing left to read. Everything else in
-    // this act waits for that, so the reveal is not competing with tools.
-    close: smooth(p / 0.24),
+    centre: smooth(p / 0.2),        // the ball comes back from its side-by-side spot
+    // and the camera goes all the way in behind it, then holds there. The shell
+    // filling the frame is the still the act is built around: it is where the
+    // problem gets stated, so it lasts half the section rather than a moment,
+    // and the tools are kept out of it.
+    close: smooth(p / 0.2),
     mark: smooth((p - 0.1) / 0.32), // the V fades up inside the shell
-    ring: smooth((p - 0.34) / 0.3), // then the tools arrive on their orbits
+    // The problem, told against that held frame.
+    copy: smooth((p - 0.22) / 0.16) * (1 - smooth((p - 0.86) / 0.14)),
     spin: p * 1.9,                  // radians — monotonic in scroll
-    frame: smooth((p - 0.3) / 0.4), // as the camera backs off to hold them
-    copy: smooth((p - 0.34) / 0.2) * (1 - smooth((p - 0.84) / 0.16)),
+    frame: smooth((p - 0.52) / 0.34), // only then does the camera back off
+    ring: smooth((p - 0.56) / 0.3),   // far enough to hold the ring of tools
   }
 }
 

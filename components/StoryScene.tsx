@@ -395,7 +395,7 @@ export default function StoryScene(
       // and leaves its dust behind, so the sections below read on a quiet field
       // instead of over a lever. Position-derived like everything else, so it
       // comes back exactly on the way up.
-      const tail = Math.min(1, Math.max(0, (p3 - 1) / 0.3))
+      const tail = Math.min(1, Math.max(0, (p3 - 1) / 0.22))
       const off = 1 - tail
 
       // The framing is tuned for a wide screen. On a narrower one the same
