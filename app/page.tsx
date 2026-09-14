@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Nav from '@/components/Nav'
 import ProgressBar from '@/components/ProgressBar'
 import BookingFlow from '@/components/BookingFlow'
+import ContactFlow from '@/components/ContactFlow'
 import ProcessRail from '@/components/ProcessRail'
 import ScrollHook from '@/components/ScrollHook'
 import HomeBehaviors from '@/components/HomeBehaviors'
@@ -351,56 +352,7 @@ export default function HomePage() {
         {/* A warmer band than the page it sits on, so the ask reads as a change of
             register rather than another section. */}
         <section id="contact" data-reveal="1" style={{ background: '#d3d7e9', color: '#1a1740', scrollMarginTop: '0', padding: '0 56px' }}>
-          <div id="contactGrid" style={{ maxWidth: '1200px', margin: '0 auto', padding: '96px 0 56px', display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1.05fr)', gap: '64px', alignItems: 'start' }}>
-
-            <div>
-              <p style={{ fontFamily: 'ui-monospace,Menlo,monospace', fontSize: '12px', letterSpacing: '.14em', textTransform: 'uppercase', color: '#707793', margin: '0 0 26px' }}>Let&rsquo;s make room for better work.</p>
-
-              <h2 style={{ fontSize: 'clamp(36px, 4.2vw, 54px)', fontWeight: '700', letterSpacing: '-.02em', lineHeight: '1.06', margin: '0 0 20px' }}>Have a bottleneck{' '}<br className="brDesk" />in mind?</h2>
-
-              <p style={{ fontSize: '16px', color: '#4a4f70', lineHeight: '1.7', margin: '0 0 44px', maxWidth: '430px' }}>Tell me the one thing you&apos;d do more of if it didn&apos;t cost more to do. You get a written plan and a quote back &mdash; free, yours to keep, and no call needed to find out whether this is worth doing at all.</p>
-
-              {/* The four steps read as a sequence, so they run down a rail rather than
-                  across a row. */}
-              <ol id="contactSteps" style={{ listStyle: 'none', margin: '0 0 44px', padding: '0', borderLeft: '1px solid #b9bfd6' }}>
-                {[
-                  ['01', 'Two minutes, no brief', 'Five fields, in your own words. No technical detail, no deck, nothing to prepare.'],
-                  ['02', 'A straight answer in one business day', "If AI is not the lever here, I say so and point you somewhere better. No call, no pitch, no follow-up sequence."],
-                  ['03', 'A 30-minute working call', "We map where the hours actually go and what it would take to get them back. You leave with the shortlist even if you stop there."],
-                  ['04', 'A written plan and a quote', 'Scope, approach, timeline and price. Free, and yours to keep — act on it with me, in-house, or with someone else entirely.'],
-                ].map(([n, title, body], idx, all) => (
-                  <li key={n} style={{ padding: idx === all.length - 1 ? '0 0 0 22px' : '0 0 26px 22px' }}>
-                    <div style={{ fontFamily: 'ui-monospace,Menlo,monospace', fontSize: '12px', color: '#3a4fae', marginBottom: '8px' }}>{n}</div>
-                    <div style={{ fontSize: '15px', fontWeight: '600', color: '#1a1740', marginBottom: '5px' }}>{title}</div>
-                    <p style={{ fontSize: '13.5px', color: '#4a4f70', lineHeight: '1.6', margin: '0' }}>{body}</p>
-                  </li>
-                ))}
-              </ol>
-
-              <p style={{ fontFamily: 'ui-monospace,Menlo,monospace', fontSize: '12px', letterSpacing: '.1em', lineHeight: '1.9', color: '#707793', margin: '0' }}>
-                STERIC TSUI / FOUNDER<br />TORONTO, CANADA
-              </p>
-            </div>
-
-            {/* A second panel under the form: what the 30 minutes actually contain,
-                so booking one is a known quantity rather than an open-ended call. */}
-            <div style={{ gridColumn: '2', background: '#e6e8f2', border: '1px solid #c4c9de', borderRadius: '16px', padding: '30px 32px' }} id="callPanel">
-              <p style={{ fontSize: '12px', fontWeight: '600', letterSpacing: '.14em', textTransform: 'uppercase', color: '#1a1740', margin: '0 0 20px' }}>What the call looks like</p>
-              <ol style={{ listStyle: 'none', margin: '0', padding: '0', display: 'grid', gap: '14px' }}>
-                {[
-                  ['01', 'Five minutes on your operation — the team, the tools, what already runs.'],
-                  ['02', "Fifteen minutes on where AI earns its keep in situations like yours, and where it doesn't."],
-                  ['03', 'Ten minutes on the plan: what it would cover, and what it costs. No pressure if it is not a fit.'],
-                ].map(([n, body]) => (
-                  <li key={n} style={{ display: 'grid', gridTemplateColumns: '30px 1fr', gap: '10px', alignItems: 'baseline' }}>
-                    <span style={{ fontFamily: 'ui-monospace,Menlo,monospace', fontSize: '13px', color: '#3a4fae' }}>{n}</span>
-                    <span style={{ fontSize: '14.5px', lineHeight: '1.55', color: '#3e414f' }}>{body}</span>
-                  </li>
-                ))}
-              </ol>
-              <p style={{ fontSize: '13px', color: '#7b83a8', margin: '22px 0 0', paddingTop: '20px', borderTop: '1px solid #c4c9de' }}>Prefer email?<br /><a href="mailto:meetvectis@gmail.com" style={{ color: '#4a4f70', borderBottom: '1px solid #cdd8ee' }}>meetvectis@gmail.com</a></p>
-            </div>
-          </div>
+          <ContactFlow />
 
           {/* The calendar gets the whole column rather than half of one: Cal
               lays the event, the month and the free times side by side once it

@@ -264,3 +264,47 @@ h2[data-words][data-in] span{opacity:1;transform:none}
   .cta-wrap{padding:0 22px}
   #ctaBanner{flex-direction:column;align-items:flex-start;gap:24px;padding:30px 26px}
 }
+
+/* --- contact: the four steps, across rather than down --------------------- */
+.cflow{max-width:1200px;margin:0 auto;padding:96px 0 4px;text-align:center}
+.cflow-eyebrow{font-family:ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:.14em;
+  text-transform:uppercase;color:#707793;margin:0 0 26px}
+.cflow-head{font-size:clamp(34px,4.4vw,58px);font-weight:700;letter-spacing:-.025em;line-height:1.08;
+  margin:0 0 60px;text-wrap:balance}
+/* The second line answers the first, so it carries the brand gradient the way
+   the act captions upstream do. */
+.cflow-head em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.cflow-row{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;align-items:stretch}
+/* A card each, so the four read as four things and not as one paragraph in
+   columns. Stretched to a common height: the captions are not the same length
+   and a ragged row undoes the point of the rule joining them. */
+.cflow-node{position:relative;display:flex;flex-direction:column;align-items:center;
+  padding:26px 18px 28px;border-radius:16px;background:rgba(251,252,255,.5);
+  border:1px solid rgba(255,255,255,.6)}
+/* The rule that joins them runs behind the rings, from the centre of one node
+   to the centre of the next, so it never pokes out either end of the row. */
+.cflow-node::before{content:'';position:absolute;top:58px;left:-50%;width:100%;height:1px;
+  background:#b9bfd6;z-index:0}
+.cflow-node:first-child::before{display:none}
+.cflow-ring{position:relative;z-index:1;display:grid;place-items:center;width:64px;height:64px;border-radius:50%;
+  background:#fbfcff;border:1px solid #c8cde0;color:#3a4fae;box-shadow:0 6px 18px rgba(26,23,64,.07)}
+.cflow-num{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:#707793;margin:20px 0 8px}
+.cflow-name{font-size:15.5px;font-weight:600;color:#1a1740;line-height:1.3}
+.cflow-note{font-size:13px;color:#4a4f70;line-height:1.5;margin-top:6px;max-width:190px}
+.cflow-foot{font-family:ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:.1em;
+  text-transform:uppercase;color:#707793;margin:56px 0 0;line-height:1.9}
+.cflow-sign{font-family:ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:.1em;
+  text-transform:uppercase;color:#8c92ab;margin:10px 0 0}
+.cflow-sign a{color:#4a4f70;border-bottom:1px solid #cdd8ee}
+@media (max-width:900px){
+  .cflow{padding:64px 0 4px;text-align:left}
+  .cflow-head{margin-bottom:40px}
+  /* Two across on a phone rather than four squeezed or one long column. */
+  .cflow-row{grid-template-columns:repeat(2,1fr);gap:14px}
+  .cflow-node{padding:0 8px;align-items:flex-start;text-align:left}
+  .cflow-node::before{display:none}
+  .cflow-ring{width:52px;height:52px}
+  .cflow-num{margin:14px 0 6px}
+  .cflow-note{max-width:none}
+  .cflow-foot{margin-top:40px}
+}
