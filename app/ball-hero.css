@@ -15,6 +15,8 @@
   --accent-dot:#3a4fae; --accent-2:#3a4fae;
   --frame:0; --hero:1; --leverage:0; --orbit:0; --lever:0;
   --hero-h:340vh;
+  /* The three acts end to end: 340vh + 210vh + 380vh. */
+  --story-h:calc(var(--hero-h) + 590vh);
   position:relative; margin:0;
   /* The stage hangs 100vh past the story (that is what its negative margin
      buys) and would otherwise paint the lever over the section below. Clip,
@@ -22,9 +24,16 @@
   overflow:clip;
   /* One wash for the whole story, so the three acts have no seam between them.
      It deepens through the hero (which ends around 37%) and eases back out. */
-  background:
+  /* The container now runs the whole page, so the ramp is pinned to the height
+     of the three acts in absolute units rather than to 100% of the element —
+     otherwise the hero's colour would be smeared over thirteen thousand pixels.
+     Below the acts it hands over to the flat page colour. */
+  background-color:#f2f5fb;
+  background-image:
     radial-gradient(90vw 204vh at 50% calc(var(--hero-h) * 1.08),rgba(169,198,246,.92) 0%,transparent 62%),
     linear-gradient(180deg,var(--sky-3) 0%,#dfe8fb 26%,var(--sky-2) 37%,#d5e2fa 56%,#f2f5fb 100%);
+  background-repeat:no-repeat,no-repeat;
+  background-size:100% var(--story-h),100% var(--story-h);
   color:var(--ink);
   font-family:-apple-system,'Helvetica Neue',Helvetica,sans-serif;
 }
@@ -36,6 +45,12 @@
 /* The acts stay out of the stacking order (no z-index of their own) so the 3D
    layer paints over their backgrounds and their sticky copy paints over it. */
 .ball-stage,.orbit-stage,.lever-stage{position:relative;margin:0}
+/* Everything after the story sits on top of the 3D layer rather than under it:
+   the acts deliberately take no stacking context so the scene paints over their
+   backgrounds, but the sections below are content and have to win. */
+.story > section:not(.ball-stage):not(.orbit-stage):not(.lever-stage),
+.story > footer,
+.story > div:not(.story-stage){position:relative;z-index:2}
 .ball-stage{height:var(--hero-h)}
 .orbit-stage{height:210vh}
 .lever-stage{height:380vh}
@@ -46,7 +61,9 @@
    keeps docking from the bottom of the hero exactly as it always has. */
 #introTopBar{position:absolute;left:clamp(20px,4vw,56px);right:clamp(20px,4vw,56px);top:28px;z-index:3;
   display:flex;flex-wrap:nowrap;align-items:center;justify-content:space-between;padding-bottom:18px;
-  border-bottom:1px solid rgba(58,79,174,.16);opacity:calc(.25 + .75 * var(--hero))}
+  /* Held at full strength: the brand and the one call to action are the two
+     things that must survive the dive, not fade out under it. */
+  border-bottom:1px solid rgba(58,79,174,.16)}
 .intro-brand{display:flex;align-items:center;gap:5px}
 .intro-brand img{width:32px;height:32px;object-fit:contain;display:block}
 .intro-brand span{font-size:24px;font-weight:700;letter-spacing:-.035em;color:var(--ink);
@@ -144,7 +161,7 @@
 
 
 @media (max-width:900px){
-  .story{--hero-h:300vh}
+  .story{--hero-h:300vh;--story-h:calc(var(--hero-h) + 520vh)}
   .orbit-stage{height:180vh}
   .lever-stage{height:340vh}
   .act-copy{padding:34px clamp(20px,6vw,32px) calc(12vh + 22px)}

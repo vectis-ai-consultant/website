@@ -150,3 +150,77 @@ h2[data-words][data-in] span{opacity:1;transform:none}
    jump: reveal it by fade only. The shared 36px translate is what made the anchor
    land 36px short of the section top. */
 #contact[data-reveal]{transform:none}
+
+/* ── How it works: the four-step rail ─────────────────────────────────────────
+   A big framed visual holds still on the left while compact copy moves past it
+   on the right, the thin rule between them marking how far through you are.
+   Every animated value comes from scroll position (see lib/rail-state.ts), so
+   the section replays exactly in reverse on the way back up. */
+.rail-section{padding:40px 56px 110px;max-width:1200px;margin:0 auto;scroll-margin-top:110px}
+.rail-head{display:flex;align-items:flex-end;gap:24px;margin-bottom:22px}
+.rail-bignum{font-size:120px;font-weight:300;line-height:.8;color:#dbe3f3;font-family:Georgia,serif;letter-spacing:-.02em}
+.rail-eyebrow{font-size:13px;letter-spacing:.18em;color:#1a1740;font-weight:600;padding-bottom:6px}
+/* Narrower than a full-width section head, because it now shares the column
+   with the artefact and has to stay on screen alongside it. */
+.rail-title{font-size:clamp(30px,2.9vw,42px);font-weight:700;letter-spacing:-.025em;line-height:1.1;
+  margin:0 0 34px;text-wrap:pretty}
+/* The visual takes the room; the copy is a caption beside it, not a column of
+   its own competing for the eye. */
+.rail-grid{display:grid;grid-template-columns:minmax(0,1.32fr) minmax(0,.78fr);gap:56px;align-items:start}
+/* Pinned for the whole section: only the steps column scrolls. */
+.rail-aside{position:sticky;top:96px}
+
+/* Framed like a screen, so an abstract panel still reads as a thing you would
+   be shown on the call rather than a diagram. */
+.rail-card{background:#fbfcff;border:1px solid #cdd8ee;border-radius:20px;overflow:hidden;
+  box-shadow:0 24px 60px -32px rgba(26,23,64,.45),0 2px 8px -4px rgba(26,23,64,.12)}
+.rail-card-head{display:flex;align-items:center;gap:9px;padding:15px 22px;
+  font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#7b83a8;
+  background:#f2f5fb;border-bottom:1px solid #e2e8f6}
+.rail-card-head::before{content:'';width:8px;height:8px;border-radius:50%;background:#cdd8ee;
+  box-shadow:13px 0 0 #cdd8ee,26px 0 0 #cdd8ee;margin-right:28px;flex:none}
+.rail-card-body{padding:26px 28px 24px}
+.rail-row{display:grid;grid-template-columns:1fr 104px;align-items:center;gap:18px;padding:13px 0;
+  border-top:1px solid #eef2fa;font-size:15px;color:#343061}
+.rail-row:first-child{border-top:0}
+.rail-bar{display:block;height:6px;border-radius:999px;background:#e9eefa;overflow:hidden}
+.rail-bar i{display:block;height:100%;border-radius:999px;background:var(--grad,linear-gradient(90deg,#3a4fae,#7b83a8))}
+.rail-note{font-size:13.5px;color:#7b83a8;line-height:1.6;margin:22px 0 0;padding-top:18px;border-top:1px solid #eef2fa}
+
+/* Starts level with the pinned column rather than at the section's very top,
+   which also keeps the first step clear of the docked nav. */
+.rail-steps{position:relative;list-style:none;margin:0;padding:96px 0 0 30px}
+.rail-track{position:absolute;left:0;top:4px;bottom:4px;width:2px;background:#e2e8f6;border-radius:2px;overflow:hidden}
+.rail-fill{display:block;width:100%;height:100%;background:var(--grad,linear-gradient(180deg,#3a4fae,#7b83a8));
+  transform:scaleY(0);transform-origin:top}
+/* Roomy enough that only one step is near the middle of the viewport at a
+   time, which is what decides the pinned visual. */
+.rail-step{padding:0 0 34vh;opacity:.34;transition:opacity .4s ease}
+/* Trailing room so the pinned column is still held while the last step is
+   being read, instead of sliding away under it. */
+.rail-step:last-child{padding-bottom:42vh}
+.rail-step.is-active{opacity:1}
+.rail-tag{font-size:11px;letter-spacing:.18em;color:#7b83a8;font-weight:600}
+.rail-step h3{font-size:28px;font-weight:700;letter-spacing:-.02em;margin:12px 0 6px;color:#1a1740}
+.rail-when{font-size:11px;letter-spacing:.18em;color:#3a4fae;font-weight:600;text-transform:uppercase}
+.rail-step p{font-size:15px;color:#4a4f70;line-height:1.7;margin:16px 0 0;max-width:300px}
+.rail-card-inline{display:none;margin-top:24px}
+
+@media (max-width:900px){
+  .rail-section{padding:20px 22px 70px}
+  .rail-bignum{font-size:84px}
+  .rail-title{font-size:34px;margin-bottom:44px}
+  /* One column: the pinned visual has nothing to sit beside, so each step
+     carries its own card instead. */
+  .rail-grid{grid-template-columns:1fr;gap:0}
+  /* Nothing to pin beside at this width, so the head scrolls with the page and
+     each step carries its own card. */
+  .rail-aside{position:static}
+  .rail-steps{padding-top:8px}
+  .rail-aside .rail-card{display:none}
+  .rail-step{opacity:1;padding-bottom:56px}
+  .rail-step h3{font-size:25px}
+  .rail-step p{max-width:none}
+  .rail-card-inline{display:block}
+}
+@media (prefers-reduced-motion:reduce){.rail-step{opacity:1}}

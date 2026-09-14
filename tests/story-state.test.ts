@@ -1,6 +1,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { orbitState, leverState } from '../lib/ball-state.ts'
+import { railState } from '../lib/rail-state.ts'
 
 test('orbit clamps outside the section', () => {
   assert.deepEqual(orbitState(-3), orbitState(0))
@@ -45,4 +46,13 @@ test('both acts are pure, so scrolling back up replays them', () => {
     assert.deepEqual(orbitState(p), orbitState(p))
     assert.deepEqual(leverState(p), leverState(p))
   }
+})
+
+test('the rail is position-derived and clamps outside its section', () => {
+  assert.deepEqual(railState(-2, 4), railState(0, 4))
+  assert.deepEqual(railState(5, 4), railState(1, 4))
+  // Every step gets a turn, in order, and the last one holds to the end.
+  assert.deepEqual([0, 0.3, 0.6, 0.9, 1].map((p) => railState(p, 4).index), [0, 1, 2, 3, 3])
+  // Pure: the same position always gives the same state.
+  for (const p of [0.07, 0.41, 0.83]) assert.deepEqual(railState(p, 4), railState(p, 4))
 })

@@ -388,7 +388,15 @@ export default function StoryScene(
     const place = () => {
       const s1 = ballState(run(act1))
       const s2 = orbitState(run(act2))
-      const s3 = leverState(run(act3))
+      const p3 = run(act3)
+      const s3 = leverState(p3)
+      // Past the third act the story is told, but the scene is now the page's
+      // whole background. The machine bows out over the next third of a screen
+      // and leaves its dust behind, so the sections below read on a quiet field
+      // instead of over a lever. Position-derived like everything else, so it
+      // comes back exactly on the way up.
+      const tail = Math.min(1, Math.max(0, (p3 - 1) / 0.3))
+      const off = 1 - tail
 
       // The framing is tuned for a wide screen. On a narrower one the same
       // distance would push the ball past the edges, so back the camera off.
@@ -398,7 +406,7 @@ export default function StoryScene(
       // actually fits it. Worked out from the aspect, it is a no-op at 16:10.
       const tanHalf = Math.tan((camera.fov * Math.PI) / 360)
       const far = Math.max(5.6, 2.5 / (tanHalf * camera.aspect))
-      const radius = mix(mix(mix(s1.radius, 2.9, s2.close), 6.0, s2.frame) * fit, far, s3.pull)
+      const radius = mix(mix(mix(s1.radius, 2.9, s2.close), 6.0, s2.frame) * fit, far, s3.pull) * (1 + 0.45 * tail)
       const polar = mix(mix(s1.polar, 1.46, s2.frame), 1.4, s3.pull)
       // Act 2 looks below the ball so it rides above its own caption; act 3
       // comes back to level, which leaves the lower third to the copy.
@@ -419,8 +427,8 @@ export default function StoryScene(
 
       // --- the mark: inside the ball from the dive on, then the fulcrum -----
       const markOn = Math.max(s1.mark, s2.mark)
-      markMat.opacity = markOn
-      mark.visible = markOn > 0.01
+      markMat.opacity = markOn * off
+      mark.visible = markOn * off > 0.01
       mark.scale.setScalar(mix(0.3, RIG, s3.flip))
       mark.rotation.z = Math.PI * s3.flip
       // The camera starts overhead, and an extruded glyph seen from above is all
@@ -439,15 +447,17 @@ export default function StoryScene(
       mark.position.y = mix(ball.position.y, RIG_Y + 1.5 * RIG, s3.flip)
 
       // --- 03 · the beam ----------------------------------------------------
-      plank.visible = s3.solid > 0.01
-      plankMat.opacity = s3.solid
+      plank.visible = s3.solid * off > 0.01
+      plankMat.opacity = s3.solid * off
       lever.rotation.z = s3.tilt * 0.22
       shellMat.opacity = 0.16 * (1 - s3.shatter)
       shell.visible = s3.shatter < 1
       rimMat.uniforms.uFade.value = 1 - s3.shatter
       rim.visible = s3.shatter < 1
       dotMat.uniforms.uScale.value = 1 + s3.shatter * 0.8
-      dotMat.uniforms.uFade.value = (1 - s3.shatter * 0.8) * (1 - s3.solid)
+      // The dust is what stays: it comes back up as the beam goes, and holds a
+      // whisper of itself behind every section below.
+      dotMat.uniforms.uFade.value = (1 - s3.shatter * 0.8) * (1 - s3.solid) + 0.2 * tail
       const shardFade = s3.shatter * (1 - s3.solid) * 0.6
       shardMat.uniforms.uFade.value = shardFade
       shards.visible = shardFade > 0.01
@@ -471,11 +481,11 @@ export default function StoryScene(
         // Face the viewer while orbiting; lie flush with the beam once landed.
         m.rotation.set(0, Math.atan2(camera.position.x - wx, camera.position.z - wz) * (1 - land), 0)
         m.scale.setScalar(mix(1.25, 1, land))
-        setTileFade(m, Math.max(s2.ring, land))
+        setTileFade(m, Math.max(s2.ring, land) * off)
       }
 
       // Rocket: upright, riding the far end of the beam, then gone.
-      const on = Math.min(s3.solid, 1)
+      const on = Math.min(s3.solid, 1) * off
       rocket.visible = on > 0.01
       rocket.scale.setScalar(on)
       const a = lever.rotation.z
