@@ -3,7 +3,7 @@ import Nav from '@/components/Nav'
 import ProgressBar from '@/components/ProgressBar'
 import BookingFlow from '@/components/BookingFlow'
 import ContactFlow from '@/components/ContactFlow'
-import OutputGrid from '@/components/OutputGrid'
+import InboxStack from '@/components/InboxStack'
 import ProcessRail from '@/components/ProcessRail'
 import ScrollHook from '@/components/ScrollHook'
 import HomeBehaviors from '@/components/HomeBehaviors'
@@ -84,11 +84,11 @@ export default function HomePage() {
             </div>
 
             <div className="ball-leverage">
-              <h2>Grow the output.<br /><em>Not the headcount.</em></h2>
-              {/* The three bullets that used to sit here are the labels on the
-                  grid now: four blocks becoming forty says it faster. */}
-              <OutputGrid />
-              <p className="ball-note">The same people, with the repeat work running itself &mdash; so the team you have is the team you scale on.</p>
+              <h2>The leads are already there.<br /><em>The answers aren&rsquo;t.</em></h2>
+              {/* The bullets that used to sit here are the inbox now: watching it
+                  stack up says it faster than three lines of prose did. */}
+              <InboxStack />
+              <p className="ball-note">Every hour a lead waits, it cools &mdash; and most of that pile is the same four questions. Answer all of it, with the team you already have.</p>
             </div>
             </div>
           </section>
