@@ -1,0 +1,152 @@
+/* Home page only. Lifted verbatim from the artboard's <style> block, minus the
+   four base rules globals.css already carries. */
+@keyframes panel-in { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
+@keyframes row-in { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none} }
+@keyframes row-loop { 0%{opacity:0;transform:translateY(10px)} 7%{opacity:1;transform:none} 80%{opacity:1;transform:none} 90%{opacity:0;transform:translateY(-6px)} 100%{opacity:0;transform:translateY(10px)} }
+@keyframes bar-grow { 0%{transform:scaleY(0)} 25%{transform:scaleY(1)} 80%{transform:scaleY(1)} 92%{transform:scaleY(0)} 100%{transform:scaleY(0)} }
+@keyframes typing { 0%,100%{width:0} 60%,85%{width:100%} }
+@keyframes spin { to{transform:rotate(360deg)} }
+[data-tools-cell]:hover [data-tools-track]{animation-play-state:paused!important}
+/* --- tool marquee: app-icon tiles.
+   The artboard shipped flat monochrome glyphs at 55% opacity behind a grayscale
+   filter. These render each mark as a raised rounded tile instead — brand colour,
+   soft drop shadow, specular top edge. Inline styles again, so !important. --- */
+[data-tools-row]{filter:none!important;opacity:1!important;padding:14px 0!important;
+  /* wider edge fade: tiles are far bigger than the 24px glyphs this mask was cut
+     for, and a narrow fade guillotines a wordmark instead of dissolving it */
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 20%,#000 80%,transparent)!important;
+  mask-image:linear-gradient(90deg,transparent,#000 20%,#000 80%,transparent)!important}
+[data-tools-track] img,[data-tools-track] span{
+  box-sizing:content-box!important;margin:0 11px!important;border-radius:10px!important;
+  background:linear-gradient(155deg,#fff 0%,#fbfcff 52%,#e9eefa 100%)!important;
+  box-shadow:0 5px 12px rgba(26,23,64,.15),0 1px 2px rgba(26,23,64,.10),
+             inset 0 1px 0 rgba(255,255,255,.95),0 0 0 .5px rgba(26,23,64,.06)!important;
+  transition:transform .4s cubic-bezier(.2,.7,.2,1),box-shadow .4s cubic-bezier(.2,.7,.2,1)!important;
+}
+[data-tools-track] img{width:26px!important;height:26px!important;padding:9px!important}
+[data-tools-track] span{
+  padding:13px 15px!important;font-size:13px!important;color:#343061!important;
+  letter-spacing:-.01em!important;line-height:18px!important;
+}
+[data-tools-cell]:hover [data-tools-track] img,
+[data-tools-cell]:hover [data-tools-track] span{
+  transform:translateY(-4px)!important;
+  box-shadow:0 12px 22px rgba(26,23,64,.20),0 2px 4px rgba(26,23,64,.12),
+             inset 0 1px 0 rgba(255,255,255,.95),0 0 0 .5px rgba(26,23,64,.06)!important;
+}
+@media (prefers-reduced-motion:reduce){
+  [data-tools-cell]:hover [data-tools-track] img,
+  [data-tools-cell]:hover [data-tools-track] span{transform:none!important}
+}
+@keyframes toolsMarquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
+@keyframes intro-zoom { 0%{transform:scale(.6);opacity:0} 20%{opacity:1} 55%{transform:scale(1.15);opacity:1} 100%{transform:scale(3.2);opacity:0} }
+[data-reveal]{opacity:0;transform:translateY(36px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1)}
+[data-reveal][data-in]{opacity:1;transform:none}
+[data-stagger]>*{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+[data-stagger][data-in]>*{opacity:1;transform:none}
+[data-stagger][data-in]>*:nth-child(1){transition-delay:.05s}[data-stagger][data-in]>*:nth-child(2){transition-delay:.15s}[data-stagger][data-in]>*:nth-child(3){transition-delay:.25s}[data-stagger][data-in]>*:nth-child(4){transition-delay:.35s}[data-stagger][data-in]>*:nth-child(5){transition-delay:.45s}[data-stagger][data-in]>*:nth-child(6){transition-delay:.55s}
+[data-line]{transform:scaleX(0);transform-origin:left;transition:transform 1.1s cubic-bezier(.2,.7,.2,1) .2s}
+[data-line][data-in]{transform:scaleX(1)}
+[data-num]{opacity:0;transform:translateX(-24px);transition:opacity 1s ease,transform 1s cubic-bezier(.2,.7,.2,1)}
+[data-num][data-in]{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){[data-reveal],[data-stagger]>*,[data-line],[data-num]{opacity:1;transform:none;transition:none}}
+/* headline words land one after another; JS splits the text and sets the delays */
+h2[data-words] span{display:inline-block;opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+h2[data-words][data-in] span{opacity:1;transform:none}
+/* nav link for the section currently crossing the middle of the viewport */
+#navBar .navPill a.navActive{color:#3a4fae!important}
+@media (prefers-reduced-motion:reduce){h2[data-words] span{opacity:1;transform:none;transition:none}}
+@keyframes intro-glow { 0%{text-shadow:0 0 0 rgba(176,138,74,0)} 40%{text-shadow:0 0 60px rgba(176,138,74,.55), 0 0 120px rgba(176,138,74,.3)} 100%{text-shadow:0 0 20px rgba(176,138,74,.2)} }
+.hv1:hover{color:#1a1740 !important;}
+.hv2:hover{background:#3a4fae !important;color:#1a1740 !important;}
+.hv3:hover{color:#3a4fae !important;}
+.hv4:hover{background:#fbfcfe !important;}
+.hv5:hover{background:#343061 !important;color:#f2f5fb !important;transform:translateY(-2px) !important;}
+.hv6:hover{background:#394c9a !important;color:#1a1740 !important;}
+.hv7:hover{color:#9499aa !important;}
+
+/* --- responsive: the artboard is a 1440x900 desktop frame.
+   The design ships every rule as an inline style attribute, so each override
+   below needs !important to win against it. --- */
+@media (max-width:1040px){
+  #heroWrap{flex-direction:column !important;align-items:flex-start !important;gap:8px !important}
+  #heroText{flex:1 1 auto !important;max-width:none !important;min-width:0 !important;width:100% !important}
+  #heroScene{flex:0 0 auto !important;width:100% !important;height:46vh !important;margin-top:0 !important}
+  #heroMark{display:none !important}
+  #howGrid{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+  #servicesGrid{grid-template-columns:1fr !important;gap:32px !important}
+  #processGrid{grid-template-columns:repeat(2,1fr) !important;gap:32px !important}
+  #ctaBanner{flex-direction:column !important;align-items:flex-start !important;gap:24px !important}
+  #footerMark{font-size:12vw !important}
+  #panelStage{max-width:100% !important}
+}
+@media (max-width:720px){
+  section:not(.ball-stage),footer{padding-left:24px !important;padding-right:24px !important}
+  [data-enquiry] form{grid-template-columns:1fr !important;gap:14px !important}
+  #servicesHead,#processHead{font-size:30px !important;margin-bottom:48px !important}
+  #howGrid,#processGrid{grid-template-columns:1fr !important}
+  #contactCard{padding:32px 24px !important}
+  #contactActions{flex-wrap:wrap !important;gap:10px !important}
+  #contactActions > div{margin-left:0 !important}
+  /* floating nav: let the pills wrap instead of running off-screen */
+  #navBar{flex-wrap:wrap !important;gap:6px !important;padding:0 12px !important}
+  /* tighter still below 720: the desktop dock is 42px circles, this trims the pill */
+  #navBar .navPill{padding:9px 16px !important;gap:16px !important}
+  #navBar .navPill a{font-size:13px !important}
+  #navBar > button, #navBar > a{width:42px !important;height:42px !important}
+  #navBar > button svg, #navBar > a svg{width:15px !important;height:15px !important}
+  /* demo panels are laid out at a fixed 440px inside a 520px stage */
+  #panelStage{height:auto !important;min-height:480px !important}
+  #panelStage [data-panel]{position:relative !important;padding:20px 0 !important}
+  #panelStage [data-panel] > div{position:static !important}
+  #panelStage [data-panel] > div > div{width:100% !important;max-width:440px !important;padding:0 16px !important;box-sizing:border-box !important}
+}
+@media (max-width:560px){
+  /* stack the three-up card rows inside the demo panels */
+  #panelStage [data-panel] div[style*="grid-template-columns:1fr 1fr 1fr"],
+  #panelStage [data-panel] div[style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr !important}
+}
+
+/* --- contact form -------------------------------------------------------
+   Inline styles can't express pseudo-classes or breakpoints, so the parts of
+   the enquiry form that need them live here. --- */
+[data-enquiry] input:focus-visible,
+[data-enquiry] select:focus-visible,
+[data-enquiry] textarea:focus-visible,
+[data-enquiry] button:focus-visible{outline:2px solid #3a4fae;outline-offset:2px}
+/* The chip's own checkbox is visually hidden, so the ring has to come from the
+   pill it sits inside. */
+[data-enquiry] .chip:focus-within{outline:2px solid #3a4fae;outline-offset:2px}
+[data-enquiry] select{appearance:none;-webkit-appearance:none;
+  background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%234a4f70' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;padding-right:38px}
+/* An unchosen select shows its prompt, so it must not read as an answer. */
+[data-enquiry] select:has(option[value=""]:checked){color:#7b83a8}
+[data-enquiry] ::placeholder{color:#9499ac}
+[data-enquiry] .chip:hover{border-color:#6a7dc9}
+
+/* One column before the 320 + 720 grid would start squeezing the form. */
+@media (max-width:1120px){
+  #contactGrid{grid-template-columns:1fr !important;gap:36px !important}
+  #callPanel{grid-column:1 !important;margin-top:0 !important}
+  #contactSteps{display:grid !important;grid-template-columns:1fr 1fr !important;
+    border-left:0 !important;column-gap:32px !important;row-gap:26px !important}
+  #contactSteps li{padding:0 !important}
+}
+@media (max-width:640px){
+  #contactSteps{grid-template-columns:1fr !important}
+}
+
+/* The dark contact band sets its own gutters; below 720 the global
+   `section{padding:24px!important}` already supplies them, so zero these or the
+   two stack and the column collapses to 230px. */
+@media (max-width:720px){
+  #contactGrid{padding-top:64px !important;padding-bottom:76px !important;gap:32px !important}
+  .brDesk{display:none}
+}
+
+/* Every "book a call" on the page lands here, so the band must not move after the
+   jump: reveal it by fade only. The shared 36px translate is what made the anchor
+   land 36px short of the section top. */
+#contact[data-reveal]{transform:none}

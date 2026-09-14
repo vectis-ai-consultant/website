@@ -1,0 +1,27 @@
+name = "vectis-resources"
+main = "src/index.js"
+compatibility_date = "2026-09-01"
+
+# Static site is served by Cloudflare Pages; this Worker answers /api/* on the
+# same hostname via a route, so the browser needs no CORS.
+# routes = [{ pattern = "vectis.ai/api/*", zone_name = "vectis.ai" }]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "vectis-resources"
+database_id = "<run: wrangler d1 create vectis-resources>"
+
+# Gated files live here, not in the public site, or the gate is decorative.
+[[r2_buckets]]
+binding = "FILES"
+bucket_name = "vectis-resources"
+
+[vars]
+SITE_ORIGIN = "https://vectis.ai"
+FROM_EMAIL  = "Vectis AI <resources@vectis.ai>"
+NOTIFY_EMAIL = "steric@vectis.ai"   # where discovery-call enquiries land
+
+# Secrets — set with `wrangler secret put <NAME>`, never in this file:
+#   RESEND_API_KEY   Resend API key for delivery
+#   TOKEN_SECRET     HMAC key for signing download links
+#   ADMIN_TOKEN      bearer token for GET /api/stats

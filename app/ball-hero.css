@@ -1,0 +1,185 @@
+/* The AI Technology Hero, rebuilt as a pinned 3D stage.
+
+   The design ships one flat blue (#dbe6fb) behind a cropped dome. Here the blue
+   is a gradient family instead — a deep indigo ink, a lit mid blue and a pale
+   sky — so the page has depth to dive into rather than a single wash.
+
+   Everything the scroll drives comes in as --frame / --hero / --leverage /
+   --orbit / --lever, set on .story by StoryScene from three position-derived
+   progress values. CSS only reads them, so scrolling back up replays the move
+   exactly. */
+.story{
+  --ink:#1a1740; --ink-2:#2a2360; --muted:#7b83a8;
+  --sky:#dbe6fb; --sky-2:#c9daf8; --sky-3:#e9effc;
+  --grad:linear-gradient(112deg,#1a1740 0%,#3a4fae 34%,#6f9bf0 62%,#2a2360 100%);
+  --accent-dot:#3a4fae; --accent-2:#3a4fae;
+  --frame:0; --hero:1; --leverage:0; --orbit:0; --lever:0;
+  --hero-h:340vh;
+  position:relative; margin:0;
+  /* The stage hangs 100vh past the story (that is what its negative margin
+     buys) and would otherwise paint the lever over the section below. Clip,
+     not hidden: clip does not make a scroll container, so sticky still works. */
+  overflow:clip;
+  /* One wash for the whole story, so the three acts have no seam between them.
+     It deepens through the hero (which ends around 37%) and eases back out. */
+  background:
+    radial-gradient(90vw 204vh at 50% calc(var(--hero-h) * 1.08),rgba(169,198,246,.92) 0%,transparent 62%),
+    linear-gradient(180deg,var(--sky-3) 0%,#dfe8fb 26%,var(--sky-2) 37%,#d5e2fa 56%,#f2f5fb 100%);
+  color:var(--ink);
+  font-family:-apple-system,'Helvetica Neue',Helvetica,sans-serif;
+}
+/* The 3D layer. Sticky for the whole run of the story and pulled back out of
+   the flow with a negative margin, so it takes no height of its own and the
+   three acts scroll over the top of it. */
+.story-stage{position:sticky;top:0;height:100vh;margin-bottom:-100vh;z-index:1;
+  overflow:hidden;pointer-events:none}
+/* The acts stay out of the stacking order (no z-index of their own) so the 3D
+   layer paints over their backgrounds and their sticky copy paints over it. */
+.ball-stage,.orbit-stage,.lever-stage{position:relative;margin:0}
+.ball-stage{height:var(--hero-h)}
+.orbit-stage{height:210vh}
+.lever-stage{height:380vh}
+.ball-sticky,.act-sticky{position:sticky;top:0;z-index:2;height:100vh;overflow:hidden;display:flex;flex-direction:column;align-items:center}
+
+/* --- the old hero's own header strip -------------------------------------
+   Not a nav: the site's nav is the floating pill in components/Nav.tsx, which
+   keeps docking from the bottom of the hero exactly as it always has. */
+#introTopBar{position:absolute;left:clamp(20px,4vw,56px);right:clamp(20px,4vw,56px);top:28px;z-index:3;
+  display:flex;flex-wrap:nowrap;align-items:center;justify-content:space-between;padding-bottom:18px;
+  border-bottom:1px solid rgba(58,79,174,.16);opacity:calc(.25 + .75 * var(--hero))}
+.intro-brand{display:flex;align-items:center;gap:5px}
+.intro-brand img{width:32px;height:32px;object-fit:contain;display:block}
+.intro-brand span{font-size:24px;font-weight:700;letter-spacing:-.035em;color:var(--ink);
+  display:inline-flex;align-items:flex-start;gap:2px;line-height:1}
+.intro-brand sup{font-size:.46em;font-weight:600;letter-spacing:0;line-height:1;margin-top:.12em;
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.intro-meta{display:flex;align-items:center;gap:22px}
+.intro-cta{display:inline-flex;align-items:center;gap:9px;white-space:nowrap;
+  padding:13px 22px;border-radius:999px;background:var(--grad);background-size:180% 100%;
+  color:#fff;font-size:14px;font-weight:600;text-decoration:none;
+  box-shadow:0 10px 24px rgba(42,35,96,.26);transition:background-position .5s,transform .2s}
+.intro-cta:hover{background-position:100% 0;transform:translateY(-1px)}
+
+.hero-bleed{position:absolute;left:0;right:0;top:0;height:42vh;z-index:0;pointer-events:none;
+  background:radial-gradient(70% 100% at 50% 0%,rgba(111,155,240,.5),rgba(169,198,246,.28) 45%,transparent 72%);
+  -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 34%,transparent 100%);
+  mask-image:linear-gradient(180deg,#000 0%,#000 34%,transparent 100%)}
+.intro-place{font-size:12px;letter-spacing:.14em;color:var(--muted)}
+
+
+/* --- the canvas ----------------------------------------------------------
+   At rest the ball is deliberately cut in half by the fold: the box hangs off
+   the bottom of the viewport so only its top dome shows, which is what pulls
+   you into the scroll. Diving in (--frame) lifts and opens it to full screen. */
+.ball-canvas{position:absolute;left:0;top:0;width:100%;height:100vh;z-index:1;pointer-events:none;
+  transform:translate3d(0,calc(65.5vh * (1 - var(--frame))),0)}
+.ball-canvas canvas{width:100%;height:100%;display:block}
+/* the reference puts a coloured bloom behind its media card; same idea */
+.ball-bloom{position:absolute;left:50%;z-index:0;pointer-events:none;
+  top:0;width:min(860px,92vw);height:44vh;
+  transform:translate3d(-50%,calc(68vh - 56vh * var(--frame)),0);
+  background:radial-gradient(closest-side,rgba(111,155,240,.42),rgba(58,79,174,.14) 58%,transparent);
+  filter:blur(14px);opacity:calc(.5 + .5 * var(--frame))}
+
+/* --- hero copy ----------------------------------------------------------- */
+.ball-copy{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;
+  padding:clamp(96px,12vh,140px) 24px 0;box-sizing:border-box;width:100%;max-width:1000px;
+  opacity:var(--hero);
+  transform:translateY(calc(-26px * (1 - var(--hero))));
+  pointer-events:auto}
+.ball-copy[data-gone]{pointer-events:none;visibility:hidden}
+/* the small announcement pill the reference floats above its headline */
+.hero-note{display:inline-flex;align-items:center;gap:10px;margin:0 0 clamp(20px,3.4vh,34px);
+  padding:8px 18px 8px 8px;border-radius:999px;background:#fff;color:var(--ink);
+  font-size:14px;box-shadow:0 6px 20px rgba(42,35,96,.12);border:1px solid rgba(58,79,174,.1)}
+.hero-note b{background:var(--grad);color:#fff;border-radius:999px;padding:4px 11px;
+  font-size:12px;font-weight:700;letter-spacing:.02em}
+.ball-copy h1{margin:0;font-size:clamp(42px,5.8vw,92px);font-weight:800;letter-spacing:-.045em;line-height:.98;text-wrap:balance}
+.ball-copy h1 em{font-style:italic;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ball-lede{margin:clamp(20px,3vh,32px) auto 0;max-width:560px;font-size:clamp(17px,1.5vw,21px);line-height:1.55;color:var(--muted);text-wrap:pretty;min-height:64px;transition:opacity .3s ease}
+.ball-dots{display:flex;gap:8px;margin-top:18px;justify-content:center}
+/* the reference's paired proof cards, in place of a button row */
+.hero-badges{display:flex;gap:14px;margin-top:clamp(22px,3.6vh,38px);flex-wrap:wrap;justify-content:center}
+.hero-badge{display:inline-flex;align-items:center;gap:12px;text-align:left;
+  padding:12px 20px 12px 14px;border-radius:14px;border:1px solid rgba(58,79,174,.28);
+  background:rgba(255,255,255,.5);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.badge-mark{flex-shrink:0;width:28px;height:28px;border-radius:8px;background:var(--grad);
+  color:#fff;font-family:ui-monospace,Menlo,monospace;font-size:11px;font-style:normal;
+  display:flex;align-items:center;justify-content:center}
+.hero-badge span{display:flex;flex-direction:column;gap:2px;font-size:14px;font-weight:600;color:var(--ink)}
+.hero-badge b{font-size:10px;letter-spacing:.14em;font-weight:600;color:var(--accent-2)}
+/* The line the two cards add up to. */
+.hero-claim{margin:clamp(18px,2.4vh,28px) 0 0;font-size:clamp(15px,1.25vw,18px);
+  font-weight:600;letter-spacing:-.015em;color:var(--ink-2)}
+
+/* --- acts 02 and 03 -----------------------------------------------------
+   Both sit on a scrim at the foot of the frame: the top belongs to the docked
+   nav, and the middle belongs to whatever the scene is doing. */
+.act-copy{position:absolute;left:0;right:0;bottom:0;z-index:2;text-align:center;
+  padding:44px clamp(20px,6vw,32px) calc(9vh + 26px);pointer-events:none;
+  background:linear-gradient(180deg,rgba(233,239,252,0) 0%,rgba(236,241,252,.88) 26%,rgba(242,245,251,.99) 62%)}
+.act-copy>*{pointer-events:auto}
+.orbit-copy{opacity:var(--orbit)}
+.lever-copy{opacity:var(--lever)}
+.act-num{display:block;font-family:ui-monospace,Menlo,monospace;font-size:12px;
+  letter-spacing:.18em;color:var(--accent-2);margin-bottom:14px}
+.act-copy h2{margin:0;font-size:clamp(28px,3.4vw,50px);font-weight:600;letter-spacing:-.03em;
+  line-height:1.05;text-wrap:balance}
+.act-copy h2 em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.act-copy p{margin:16px auto 0;max-width:560px;font-size:17px;line-height:1.6;color:var(--muted);text-wrap:pretty}
+
+/* --- the side-by-side that the dive resolves into ------------------------ */
+.ball-leverage{position:absolute;z-index:2;left:clamp(20px,5vw,86px);top:50%;translate:0 -50%;
+  max-width:min(480px,42vw);text-align:left;
+  opacity:var(--leverage);
+  transform:translateX(calc(-30px * (1 - var(--leverage))));
+  pointer-events:none}
+.ball-leverage h2{margin:0;font-size:clamp(32px,3.6vw,54px);font-weight:500;letter-spacing:-1.6px;line-height:1.05}
+.ball-leverage h2 em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ball-leverage p{margin:20px 0 0;font-size:17px;line-height:1.65;color:var(--muted);text-wrap:pretty}
+.ball-steps{list-style:none;margin:28px 0 0;padding:0;display:flex;flex-direction:column;gap:12px}
+.ball-steps li{display:flex;align-items:center;gap:12px;font-size:15px;color:var(--ink)}
+.ball-steps b{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:#fff;background:var(--ink-2);
+  border-radius:6px;padding:5px 8px;letter-spacing:.04em}
+
+
+@media (max-width:900px){
+  .story{--hero-h:300vh}
+  .orbit-stage{height:180vh}
+  .lever-stage{height:340vh}
+  .act-copy{padding:34px clamp(20px,6vw,32px) calc(12vh + 22px)}
+  .act-copy p{font-size:15px}
+  /* One row at phone width: the strip must not wrap onto the announcement
+     pill, so the CTA loses its padding and its longer label. */
+  #introTopBar{top:18px;gap:12px;padding-bottom:14px}
+  .intro-brand span{font-size:21px}
+  .intro-brand img{width:27px;height:27px}
+  .intro-cta{padding:10px 15px;font-size:13px;gap:6px}
+  .ball-copy{padding:112px 26px 0}
+    /* The ball lifts instead of stepping aside, so the copy takes the lower
+     third with a scrim under it to stay readable over the glow. */
+  .ball-leverage{left:0;right:0;max-width:none;top:auto;bottom:0;translate:0;
+    padding:34px clamp(20px,6vw,32px) calc(12vh + 24px);
+    background:linear-gradient(180deg,rgba(233,239,252,0) 0%,rgba(230,237,252,.86) 22%,rgba(226,234,251,.97) 55%)}
+  .ball-canvas{transform:translate3d(0,calc(62vh * (1 - var(--frame))),0)}
+  .ball-bloom{transform:translate3d(-50%,calc(62vh - 50vh * var(--frame)),0);height:42vh}
+  .intro-place{display:none}
+  .hero-badges{flex-direction:column;align-items:stretch}
+  .hero-note{font-size:13px}
+  .hero-claim{font-size:14px;margin-top:16px}
+}
+@media (prefers-reduced-motion:reduce){
+  .ball-stage,.orbit-stage,.lever-stage{height:auto}
+  /* No pinned run to rise through, so the glow has nothing to cross. */
+  .story{--hero-h:60vh}
+  .story-stage{position:relative;height:52vh;margin-bottom:0;overflow:visible}
+  .act-sticky{position:relative;height:auto;padding:8vh 0 4vh}
+  .act-copy{position:relative;background:none;padding:0 24px}
+  .orbit-copy,.lever-copy{opacity:1}
+  .ball-sticky{position:relative;height:auto;padding-bottom:52vh}
+  .ball-canvas{height:52vh}
+  .ball-copy,.ball-leverage{opacity:1;transform:none}
+  .ball-canvas{position:relative;height:52vh;transform:none}
+  .ball-bloom{display:none}
+  .ball-leverage{position:relative;top:auto;translate:none;margin:0 auto;padding:0 24px}
+}

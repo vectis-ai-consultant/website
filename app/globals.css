@@ -1,0 +1,427 @@
+/* Base + shared behaviour ported from the static build. The design ships every
+   layout rule as an inline style attribute, so this file only carries what an
+   attribute cannot express: pseudo-classes, keyframes and media queries. */
+/* The intro overlay carries an inline display:flex, which beats the UA's
+   [hidden] rule — without this it covers the page. */
+[hidden] { display: none !important; }
+html { scroll-behavior: smooth; }
+body {
+  background: #f2f5fb; color: #1a1740; margin: 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased; overflow-x: hidden;
+}
+a { color: #1a1740; text-decoration: none; }
+a:hover { color: #3a4fae; }
+
+/* reveal on scroll */
+[data-reveal] { opacity: 0; transform: translateY(36px); transition: opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1); }
+[data-reveal][data-in] { opacity: 1; transform: none; }
+[data-stagger] > * { opacity: 0; transform: translateY(24px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1), background .3s; }
+[data-stagger][data-in] > * { opacity: 1; transform: none; }
+[data-stagger][data-in] > *:nth-child(1) { transition-delay: .05s }
+[data-stagger][data-in] > *:nth-child(2) { transition-delay: .15s }
+[data-stagger][data-in] > *:nth-child(3) { transition-delay: .25s }
+[data-stagger][data-in] > *:nth-child(4) { transition-delay: .35s }
+[data-stagger][data-in] > *:nth-child(5) { transition-delay: .45s }
+[data-stagger][data-in] > *:nth-child(6) { transition-delay: .55s }
+[data-stagger][data-in] > *:nth-child(7) { transition-delay: .65s }
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal], [data-stagger] > * { opacity: 1; transform: none; transition: none; }
+}
+
+/* hover states for inline-styled elements */
+.hv1:hover { color: #1a1740 !important; }
+.hv5:hover { background: #343061 !important; color: #f2f5fb !important; transform: translateY(-2px) !important; }
+.rcard:hover { background: #dde4f3 !important; color: #1a1740 !important; }
+.rcard:hover [data-arrow] { transform: translateX(4px); }
+.rcard:hover [data-cta] { color: #3a4fae; }
+.fmuted { color: #7b83a8; }
+.fmuted:hover { color: #1a1740 !important; }
+
+/* --- article + blog layout ---------------------------------------------------
+   A display serif over a sans body, gold eyebrows, and everything left-aligned on
+   one spine with a sticky rail in the gutter. The main column is sized so the
+   widest code line in the corpus (measured: 724px of glyphs at 13.5px mono, +48px
+   of padding) never has to scroll: 772 + 64 gap + 300 rail + 2×64 margins = 1272. */
+:root {
+  --article-width: 1272px;
+  --page-margins: 24px;
+  --rail-width: 248px;
+  --rail-gap: 48px;
+  --text-column: 720px;
+  --hero-column: 940px;
+  --headline-1: 34px;
+  --headline-5: 21px;
+  --headline-6: 17px;
+  --body: 17px;
+  --body-large: 19px;
+  --gold: #3a4fae;
+  --ink: #1a1740;
+  --ink-2: #3e414f;
+  --ink-3: #7b83a8;
+  --rule: #d3d6e0;
+  --panel: #dfe2ec;
+}
+@media (min-width: 768px)  { :root { --page-margins: 40px; --headline-1: 46px; --body: 18px; --body-large: 21px; } }
+@media (min-width: 1024px) { :root { --page-margins: 64px; --headline-1: 58px; --body: 19px; --body-large: 22px; --headline-5: 25px; --headline-6: 19px; } }
+
+.artPage {
+  /* width:100% plus horizontal padding overflows the viewport under the default
+     content-box. Scoped here rather than reset globally, because the rest of the
+     site is inline-styled against content-box. */
+  box-sizing: border-box;
+  width: 100%; max-width: var(--article-width); margin: 0 auto;
+  padding-left: var(--page-margins); padding-right: var(--page-margins);
+}
+
+/* Display serif for headlines only — the sans body is what the rest of the site
+   already uses, and the contrast is the whole identity of the page. */
+.dsp { font-family: var(--font-display), Georgia, "Times New Roman", serif; font-weight: 700; }
+
+.eyebrow {
+  font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--gold); margin: 0;
+}
+
+.crumbs {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px;
+  font-size: 14px; color: var(--ink-2); margin: 0 0 28px; padding: 0; list-style: none;
+}
+.crumbs li { display: flex; align-items: center; gap: 10px; }
+.crumbs li + li::before { content: '/'; color: #b2b6c7; }
+.crumbs a { color: var(--ink-2); text-decoration: none; }
+.crumbs a:hover { color: var(--gold); }
+.crumbs [aria-current] { color: var(--ink-3); }
+
+/* --- article masthead --- */
+.artHero { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 20px; margin-bottom: 52px; }
+.artHero h1 {
+  font-size: var(--headline-1); line-height: 1.08; letter-spacing: -.015em;
+  margin: 0; color: var(--ink); text-wrap: balance;
+}
+/* Balance splits the headline into even lines whatever the container, so on its
+   own the wider masthead changed nothing. Above 1024 the headline takes the full
+   measure instead; balance stays on phones, where an even break reads better. */
+@media (min-width: 1024px) {
+  .artHero h1 { text-wrap: pretty; }
+}
+.artSummary {
+  margin: 0; max-width: var(--text-column); color: var(--ink-2);
+  font-size: var(--body-large); line-height: 1.65; text-wrap: pretty;
+}
+.artByline {
+  display: flex; align-items: center; justify-content: center; gap: 32px;
+  flex-wrap: wrap; width: 100%; margin-top: 8px;
+}
+.artAuthor { display: flex; align-items: center; gap: 14px; }
+.artAvatar {
+  width: 44px; height: 44px; border-radius: 999px; flex-shrink: 0;
+  background: #d0d4e3; color: #2a2360;
+  display: grid; place-items: center; font-size: 15px; letter-spacing: .02em;
+}
+.artAuthor b { display: block; font-size: 15px; font-weight: 500; color: var(--ink); }
+.artAuthor span { display: block; font-size: 14px; color: var(--ink-3); margin-top: 2px; }
+.artShare { display: flex; align-items: center; gap: 6px; }
+.artShare a, .artShare button {
+  display: grid; place-items: center; width: 36px; height: 36px; border-radius: 999px;
+  color: var(--ink-2); background: none; border: 0; padding: 0; cursor: pointer;
+}
+.artShare a:hover, .artShare button:hover { color: var(--gold); background: rgba(176,138,74,.1); }
+.artShare svg { width: 19px; height: 19px; }
+
+/* --- one centred column, with the rail hanging in the right margin ---
+   .artPage keeps its 1272 cap for the index. The article drops it: the reading
+   column is centred on the viewport, so the rail cannot live inside a capped
+   spine — it sits in the margin beside the column, where there is room. */
+.artRead { max-width: none; }
+.artRead > .crumbs,
+.artRead > .artBody > .prose,
+.artRead > .artBody > .artRail,
+.artRead > footer { max-width: var(--text-column); margin-inline: auto; }
+/* The masthead sets wider than the essay — the headline gets the extra measure,
+   the standfirst inside it stays on the reading width, so the two taper. */
+.artRead > .artHero { max-width: var(--hero-column); margin-inline: auto; }
+
+.artBody { display: block; }
+/* Contents is only worth showing when it can be sticky in the margin. Stacked
+   after the essay it is dead weight, and before it, it delays the lede. */
+.artRail > .artToc { display: none; }
+
+/* 1440, not 1280: each side is (vw - 128 - 720) / 2, and the rail needs 248 + 48.
+   1280 leaves 216 — too narrow for a heading like "What you'll have at the end
+   of an afternoon" to set in fewer than four lines. */
+@media (min-width: 1440px) {
+  .artRead > .artBody {
+    display: grid; align-items: start;
+    grid-template-columns: 1fr var(--text-column) 1fr;
+  }
+  .artRead > .artBody > .prose { grid-column: 2; }
+  .artRead > .artBody > .artRail {
+    grid-column: 3; justify-self: start;
+    width: var(--rail-width); max-width: none; margin-inline: var(--rail-gap) 0;
+    position: sticky; top: 88px; max-height: calc(100vh - 112px); overflow-y: auto;
+  }
+  .artRead .artToc { display: block; }
+}
+.artToc { margin: 0 0 28px; }
+.artToc h2 {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ink-3); font-weight: 600; margin: 0 0 14px;
+}
+.artToc ol { list-style: none; margin: 0; padding: 0 0 0 16px; border-left: 1px solid var(--rule); }
+/* The section you are in takes the rule: a gold segment sitting exactly on top
+   of the grey one, so the list does not shift when the mark moves. */
+.artToc li { position: relative; margin: 0 0 12px; }
+.artToc li::before {
+  content: ''; position: absolute; left: -17px; top: -2px; bottom: -2px; width: 1px;
+  background: var(--gold); opacity: 0; transition: opacity .18s;
+}
+.artToc li.on::before { opacity: 1; }
+.artToc li.on > a { color: var(--ink); font-weight: 600; }
+.artToc a {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px; line-height: 1.4; color: var(--ink-2); text-decoration: none;
+  display: block; text-wrap: pretty;
+}
+.artToc a:hover { color: var(--ink); }
+
+/* The gate, in the article rather than the margin: it now interrupts the piece
+   once, straight after the takeaways, where a reader has just been told what the
+   thing does. Full reading width, so it reads as part of the page. */
+.prose > .artGate { background: #d3d7e9; border-radius: 16px; padding: 30px 32px; margin: 8px 0 36px; }
+.prose > .artGate > b {
+  display: block; font-size: 26px; line-height: 1.15; letter-spacing: -.01em;
+  margin: 0 0 10px; color: var(--ink);
+}
+.prose > .artGate > p { font-size: 16px; line-height: 1.6; color: #4a4f70; margin: 0 0 22px; max-width: 52ch; }
+
+/* --- blog index --- */
+.blogGrid { display: grid; gap: 56px; }
+/* 1280, not 1024: at 1024 a 420px rail leaves the featured card exactly 420 too,
+   and the two read as equals rather than as feature and rail. */
+@media (min-width: 1280px) {
+  /* :has — only reserve the rail column when a rail is actually rendered, or a
+     single post leaves the featured card squeezed into two thirds of the page. */
+  .blogGrid:has(> .railList) { grid-template-columns: minmax(0, 1fr) 380px; column-gap: 56px; }
+}
+/* Outside the query on purpose: with no rail to sit beside, the featured card would
+   run the full container at every width above 780 and its artwork would be mostly
+   void. Holding it here means the page keeps its proportions when a second post
+   arrives and the rail appears. */
+.blogGrid:not(:has(> .railList)) > .card { max-width: 780px; }
+.card { display: block; text-decoration: none; color: inherit; }
+/* Typographic artwork, not photography: a display-serif fragment on a panel, the
+   way the reference builds its cards. No image assets to ship or art-direct. */
+.cardArt {
+  position: relative; border: 1px solid var(--rule); border-radius: 10px;
+  background: var(--panel); overflow: hidden; padding: 30px 32px;
+  /* Title centred against the line-art, footer pinned — the reference composes the
+     panel this way, and top-aligned type left a void down the middle. */
+  display: grid; grid-template-rows: 1fr auto; align-content: stretch;
+  aspect-ratio: 16 / 10; margin-bottom: 18px;
+}
+.cardArt > b { align-self: center; }
+.cardArt b {
+  font-family: var(--font-display), Georgia, serif; font-weight: 700;
+  font-size: clamp(26px, 3.2vw, 42px); line-height: 1.08; letter-spacing: -.01em;
+  color: var(--ink); max-width: 62%; text-wrap: balance;
+}
+.cardArt .cardArtFoot {
+  display: flex; justify-content: space-between; gap: 16px; align-items: baseline;
+  font-size: 11px; color: var(--ink-3);
+}
+.cardArt .cardArtFoot b { font-family: inherit; font-size: 11px; font-weight: 600; color: var(--ink-2); max-width: none; }
+/* Thin gold line-art fills the panel opposite the type, so the card is composed
+   rather than a block of type in an empty box. */
+.cardArt svg {
+  position: absolute; right: 7%; top: 50%; transform: translateY(-50%);
+  width: 34%; max-width: 260px; height: auto; color: var(--gold); pointer-events: none;
+}
+.card h2, .card h3 {
+  font-family: var(--font-display), Georgia, serif; font-weight: 700;
+  color: var(--ink); letter-spacing: -.01em; text-wrap: pretty; margin: 10px 0 0;
+}
+.card h2 { font-size: clamp(26px, 2.6vw, 36px); line-height: 1.12; }
+.card h3 { font-size: 19px; line-height: 1.25; }
+.card p { margin: 12px 0 0; font-size: 16px; line-height: 1.6; color: var(--ink-2); max-width: 640px; }
+/* .card p would otherwise repaint the eyebrow, which is the same element. */
+.card p.eyebrow { margin: 0; font-size: 12px; line-height: 1.4; color: var(--gold); }
+.card:hover h2, .card:hover h3 { color: var(--gold); }
+.railList { display: grid; gap: 34px; }
+.railList .card + .card { border-top: 1px solid var(--rule); padding-top: 34px; }
+
+/* --- article prose: generated markup, so styled by element --- */
+.prose {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: var(--body); line-height: 1.75; color: var(--ink-2);
+  padding-bottom: 32px;
+}
+/* Left-aligned, not centred: the column starts where the headline starts. */
+.prose > * { max-width: var(--text-column); margin-left: 0; margin-right: 0; }
+/* Code, figures and tables break out to the full column. border-box because the
+   22/24 padding is inside the width, not added to it. */
+.prose > pre, .prose > img, .prose > figure, .prose > table {
+  max-width: 100%; box-sizing: border-box;
+}
+.prose h2, .prose h3 {
+  font-family: var(--font-display), Georgia, "Times New Roman", serif;
+  font-weight: 700; line-height: 1.15; color: var(--ink);
+  letter-spacing: -.01em; text-wrap: pretty; scroll-margin-top: 130px;
+}
+.prose h2 { font-size: var(--headline-5); margin: 48px 0 14px; }
+.prose h3 { font-size: var(--headline-6); margin: 34px 0 10px; }
+.prose p { margin: 0 0 20px; text-wrap: pretty; }
+.prose ul, .prose ol { margin: 0 0 20px; padding-left: 24px; }
+.prose li { margin: 0 0 12px; padding-left: 4px; }
+.prose li::marker { color: var(--ink-3); }
+.prose strong { font-weight: 600; color: var(--ink); }
+.prose a {
+  color: var(--ink); text-decoration: underline;
+  text-underline-offset: .18em; text-decoration-thickness: .07em;
+}
+.prose a:hover { color: var(--gold); }
+.prose code {
+  font-family: ui-monospace, Menlo, monospace; font-size: 14px;
+  color: #2a2360; background: #e3e4ea; border: 1px solid #d1d4de;
+  padding: 0 8px; border-radius: 4px; white-space: nowrap;
+}
+/* A quiet inset on the page's own paper, not a black terminal. The commands are
+   still commands, but the block no longer announces itself as one. */
+.prose pre {
+  background: #e5e7ef; color: var(--ink); border: 1px solid var(--rule);
+  border-radius: 12px; padding: 22px 24px; overflow-x: auto;
+  margin: 32px 0; line-height: 1.55;
+}
+
+/* The pipeline diagram. It was an ASCII drawing in a terminal block, which read
+   as something you had to be technical to follow — the people this page is for
+   are buying the outcome, not running the script. */
+.prose > figure.flow { margin: 36px 0; }
+.flow ol {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: 1fr; gap: 38px;
+}
+.flow li {
+  position: relative; background: var(--panel); border-radius: 14px; padding: 18px 20px;
+}
+.flow li b { display: block; font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+.flow li span { display: block; font-size: 15px; line-height: 1.55; color: var(--ink-2); }
+/* The join sits in the gap. Stacked, it is rotated a quarter turn: an arrow
+   becomes a down arrow, and the multiplication sign is unchanged by it. */
+.flow li[data-join]::before {
+  content: attr(data-join); position: absolute; display: grid; place-items: center;
+  width: 38px; height: 38px; left: 50%; top: -38px;
+  transform: translateX(-50%) rotate(90deg); color: var(--gold); font-size: 18px;
+}
+@media (min-width: 700px) {
+  .flow ol { grid-template-columns: repeat(4, 1fr); }
+  .flow li[data-join]::before { left: -38px; top: 50%; transform: translateY(-50%); }
+}
+.flow figcaption { margin: 16px 0 0; font-size: 13px; line-height: 1.6; color: var(--ink-3); }
+
+/* Labelled rows — the workspace folders, and the product file's fields. Both were
+   drawings made of box-drawing characters; the names still have to be literal, but
+   what each one holds is said in words. */
+.prose > figure.rows { margin: 32px 0; }
+.rows p { margin: 0 0 4px; font-size: 14px; color: var(--ink-3); }
+.rows p b { font-family: ui-monospace, Menlo, monospace; font-weight: 500; color: var(--ink-2); }
+.rows ul { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
+.rows li {
+  display: grid; gap: 4px 24px; align-items: baseline;
+  padding: 14px 2px; border-bottom: 1px solid var(--rule);
+}
+.rows i {
+  font-family: ui-monospace, Menlo, monospace; font-style: normal;
+  font-size: 14px; color: #2a2360;
+}
+.rows span { font-size: 16px; line-height: 1.55; color: var(--ink-2); }
+@media (min-width: 700px) { .rows li { grid-template-columns: 200px 1fr; } }
+
+/* Numbered steps, in place of the commands that used to run them. */
+.prose > figure.steps { margin: 32px 0; }
+.steps ol { list-style: none; margin: 0; padding: 0; counter-reset: step; }
+.steps li {
+  counter-increment: step; position: relative;
+  padding: 0 0 22px 46px; border-left: 1px solid var(--rule); margin-left: 15px;
+}
+.steps li:last-child { border-left-color: transparent; padding-bottom: 0; }
+.steps li::before {
+  content: counter(step); position: absolute; left: -15px; top: -2px;
+  width: 30px; height: 30px; border-radius: 999px; display: grid; place-items: center;
+  background: var(--panel); color: #2a2360; font-size: 13px; font-weight: 600;
+}
+.steps li b { display: block; font-size: 16px; font-weight: 600; color: var(--ink); margin-bottom: 5px; }
+.steps li span { display: block; font-size: 16px; line-height: 1.6; color: var(--ink-2); }
+.prose pre code {
+  background: none; border: 0; padding: 0; color: inherit;
+  font-size: 13.5px; white-space: pre;
+}
+/* The callout: a gold rule and a size up, which is how the reference sets its
+   "in short" passages apart without a box. */
+.prose blockquote {
+  margin: 32px 0; padding: 4px 0 4px 32px; border-left: 3px solid var(--gold);
+  color: var(--ink); font-size: var(--body-large); line-height: 1.7;
+}
+.prose blockquote p { margin: 0 0 12px; }
+.prose blockquote p:last-child { margin: 0; }
+.prose figcaption { font-size: 14px; line-height: 1.4; color: var(--ink-3); margin-top: 8px; }
+.prose hr { border: 0; border-top: 1px solid var(--rule); margin: 44px 0; }
+.prose img { width: 100%; height: auto; border-radius: 12px; display: block; margin: 32px 0; }
+.prose > *:first-child { margin-top: 0; }
+
+@media (max-width: 720px) {
+  section:not(.ball-stage), footer { padding-left: 24px !important; padding-right: 24px !important; }
+  .artPage { padding-left: 20px !important; padding-right: 20px !important; }
+  .prose pre { padding: 16px; border-radius: 10px; }
+}
+
+/* The dock is sized up for desktop; hold it compact below 560, where it won't fit. */
+@media (max-width: 560px) {
+  #navBar { flex-wrap: wrap !important; gap: 6px !important; padding: 0 12px !important; }
+  #navBar .navPill { padding: 9px 16px !important; gap: 16px !important; }
+  #navBar .navPill a { font-size: 13px !important; }
+  #navBar > a { width: 42px !important; height: 42px !important; }
+  #navBar > a svg { width: 15px !important; height: 15px !important; }
+}
+
+/* Nav: "Free resources" opens a pair on hover. The panel keeps a transparent
+   padding-top so the pointer never crosses dead space on the way down. */
+.navMenu { position: relative; }
+.navMenuPop {
+  position: absolute; top: 100%; left: 50%; padding-top: 18px;
+  transform: translateX(-50%) translateY(-4px);
+  opacity: 0; visibility: hidden;
+  transition: opacity .16s ease, transform .16s ease, visibility .16s;
+}
+.navMenu:hover > .navMenuPop, .navMenu:focus-within > .navMenuPop {
+  opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0);
+}
+.navMenuCard {
+  background: #fbfcfe; border-radius: 14px; padding: 7px;
+  box-shadow: 0 10px 28px rgba(25, 24, 23, .16);
+  display: flex; flex-direction: column; gap: 2px;
+}
+.navMenuCard a {
+  font-size: 14px; font-weight: 600; white-space: nowrap;
+  padding: 9px 16px; border-radius: 9px; transition: background .15s, color .15s;
+}
+.navMenuCard a:hover { background: #e5e7ef; color: #3a4fae; }
+.navMenuCard a[aria-current='page'] { color: #3a4fae; }
+.navFlatBlog { display: none; }
+
+/* No hover to open with — fall back to the two flat links. */
+@media (hover: none) {
+  .navMenuPop { display: none; }
+  .navFlatBlog { display: inline; }
+}
+
+/* Docked low on the hero: flip the panel above the pill. */
+#navBar[data-dock='1'] .navMenuPop {
+  top: auto; bottom: 100%; padding: 0 0 18px;
+  transform: translateX(-50%) translateY(4px);
+}
+#navBar[data-dock='1'] .navMenu:hover > .navMenuPop,
+#navBar[data-dock='1'] .navMenu:focus-within > .navMenuPop {
+  transform: translateX(-50%) translateY(0);
+}

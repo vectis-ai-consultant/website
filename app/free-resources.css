@@ -1,0 +1,16 @@
+/* 1040 before 720: both match below 720px and the later rule has to win. */
+@media (max-width: 1040px) {
+  #resH1 { font-size: 56px !important; }
+  #ctaBanner { flex-direction: column !important; align-items: flex-start !important; gap: 24px !important; }
+}
+
+@media (max-width: 720px) {
+  #resHero { padding-top: 150px !important; }
+  #resH1 { font-size: 38px !important; }
+  #resGrid { grid-template-columns: 1fr !important; gap: 20px !important; }
+  .rcard { min-height: 0 !important; padding: 28px 26px !important; }
+  .rcard [data-icon] { margin-bottom: 28px !important; }
+  #ctaBanner { padding: 32px 26px !important; }
+  #footerMark { font-size: 14vw !important; }
+  #footerBar { flex-direction: column !important; gap: 14px !important; }
+}
