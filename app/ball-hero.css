@@ -8,6 +8,12 @@
    --orbit / --lever, set on .story by StoryScene from three position-derived
    progress values. CSS only reads them, so scrolling back up replays the move
    exactly. */
+/* The top bar sits outside .story now, so the palette it paints with has to be
+   available at page level rather than only inside the story. */
+:root{
+  --ink:#1a1740; --ink-2:#2a2360; --muted:#7b83a8;
+  --grad:linear-gradient(112deg,#1a1740 0%,#3a4fae 34%,#6f9bf0 62%,#2a2360 100%);
+}
 .story{
   --ink:#1a1740; --ink-2:#2a2360; --muted:#7b83a8;
   --sky:#dbe6fb; --sky-2:#c9daf8; --sky-3:#e9effc;
@@ -15,8 +21,8 @@
   --accent-dot:#3a4fae; --accent-2:#3a4fae;
   --frame:0; --hero:1; --leverage:0; --orbit:0; --lever:0;
   --hero-h:340vh;
-  /* The three acts end to end: 340vh + 210vh + 380vh. */
-  --story-h:calc(var(--hero-h) + 590vh);
+  /* The three acts end to end: 340vh + 170vh + 380vh. */
+  --story-h:calc(var(--hero-h) + 550vh);
   position:relative; margin:0;
   /* The stage hangs 100vh past the story (that is what its negative margin
      buys) and would otherwise paint the lever over the section below. Clip,
@@ -52,19 +58,36 @@
 .story > footer,
 .story > div:not(.story-stage){position:relative;z-index:2}
 .ball-stage{height:var(--hero-h)}
-.orbit-stage{height:210vh}
+.orbit-stage{height:170vh}
+/* Act two animates across its whole section, so its caption has to stay pinned
+   across the whole section too. Taking no flow height (the trick the story stage
+   uses) keeps it there instead of letting it slide away two thirds of the way
+   through, while --orbit fades it out on cue. */
+#orbit .act-sticky{margin-bottom:-100vh}
 .lever-stage{height:380vh}
 .ball-sticky,.act-sticky{position:sticky;top:0;z-index:2;height:100vh;overflow:hidden;display:flex;flex-direction:column;align-items:center}
 
 /* --- the old hero's own header strip -------------------------------------
    Not a nav: the site's nav is the floating pill in components/Nav.tsx, which
    keeps docking from the bottom of the hero exactly as it always has. */
-#introTopBar{position:absolute;left:clamp(20px,4vw,56px);right:clamp(20px,4vw,56px);top:28px;z-index:3;
+/* Fixed, not absolute: the brand and the one call to action are the two things
+   that have to be reachable from anywhere on the page, so they travel with the
+   reader instead of scrolling away with the hero. The rule under them belongs
+   to the hero, so it fades with it rather than cutting across every section. */
+#introTopBar{position:fixed;left:clamp(20px,4vw,56px);right:clamp(20px,4vw,56px);top:22px;z-index:60;
   display:flex;flex-wrap:nowrap;align-items:center;justify-content:space-between;padding-bottom:18px;
-  /* Held at full strength: the brand and the one call to action are the two
-     things that must survive the dive, not fade out under it. */
-  border-bottom:1px solid rgba(58,79,174,.16)}
-.intro-brand{display:flex;align-items:center;gap:5px}
+  border-bottom:1px solid rgba(58,79,174,calc(.16 * var(--hero)))}
+/* The bar spans the full width but only its two ends are real, so the middle
+   must not swallow clicks meant for the page (or for the docked nav). */
+#introTopBar{pointer-events:none}
+.intro-brand,.intro-meta{pointer-events:auto}
+/* Past the hero the bar floats over ordinary page content, so the brand takes
+   the same opaque pill the docked nav uses. Drawn as a backdrop rather than as
+   padding, so nothing shifts: inside the hero it is simply not there. */
+.intro-brand{position:relative;display:flex;align-items:center;gap:5px}
+.intro-brand::before{content:'';position:absolute;inset:-9px -20px;border-radius:999px;z-index:-1;
+  background:#fbfcfe;opacity:calc(1 - var(--hero));
+  box-shadow:0 4px 14px rgba(26,23,64,calc(.12 * (1 - var(--hero))))}
 .intro-brand img{width:32px;height:32px;object-fit:contain;display:block}
 .intro-brand span{font-size:24px;font-weight:700;letter-spacing:-.035em;color:var(--ink);
   display:inline-flex;align-items:flex-start;gap:2px;line-height:1}
@@ -81,7 +104,7 @@
   background:radial-gradient(70% 100% at 50% 0%,rgba(111,155,240,.5),rgba(169,198,246,.28) 45%,transparent 72%);
   -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 34%,transparent 100%);
   mask-image:linear-gradient(180deg,#000 0%,#000 34%,transparent 100%)}
-.intro-place{font-size:12px;letter-spacing:.14em;color:var(--muted)}
+.intro-place{font-size:12px;letter-spacing:.14em;color:var(--muted);opacity:var(--hero)}
 
 
 /* --- the canvas ----------------------------------------------------------
@@ -161,14 +184,18 @@
 
 
 @media (max-width:900px){
-  .story{--hero-h:300vh;--story-h:calc(var(--hero-h) + 520vh)}
-  .orbit-stage{height:180vh}
+  .story{--hero-h:300vh;--story-h:calc(var(--hero-h) + 490vh)}
+  .orbit-stage{height:150vh}
   .lever-stage{height:340vh}
   .act-copy{padding:34px clamp(20px,6vw,32px) calc(12vh + 22px)}
   .act-copy p{font-size:15px}
   /* One row at phone width: the strip must not wrap onto the announcement
      pill, so the CTA loses its padding and its longer label. */
   #introTopBar{top:18px;gap:12px;padding-bottom:14px}
+  /* Narrow screens have no room for brand, nav and call to action on one line.
+     The nav keeps its hero position (data-dock='1' is the low state) and drops
+     to a second row once it rises to the top. */
+  #navBar:not([data-dock='1']){top:78px !important}
   .intro-brand span{font-size:21px}
   .intro-brand img{width:27px;height:27px}
   .intro-cta{padding:10px 15px;font-size:13px;gap:6px}

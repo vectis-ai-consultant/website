@@ -36,6 +36,20 @@ export default function HomePage() {
             the ball apart and rebuilds its dust as the leverage, with the mark
             turned over into the fulcrum. All of it is driven from scroll
             position, so it reverses exactly. See lib/ball-state.ts. */}
+        {/* Brand and the one call to action, outside the story so they sit in the
+            page's own stacking context: pinned inside the hero they scrolled away
+            with it, and they were painted under the docked nav. */}
+        <div id="introTopBar">
+          <div className="intro-brand">
+            <img src="/assets/logos/vectis-lambda.png" alt="" aria-hidden="true" />
+            <span role="img" aria-label="Vectis AI">vectis<sup>ai</sup></span>
+          </div>
+          <div className="intro-meta">
+            <span className="intro-place">TORONTO · CANADA</span>
+            <a href="#contact" className="intro-cta">Book a discovery call <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+
         <div className="story" id="story">
           {/* The 3D layer. Sticky for the whole run of the story and pulled
               back out of the flow, so the three acts scroll over it. */}
@@ -47,17 +61,6 @@ export default function HomePage() {
 
           <section id="intro" className="ball-stage">
             <div className="ball-sticky">
-            <div id="introTopBar">
-              <div className="intro-brand">
-                <img src="/assets/logos/vectis-lambda.png" alt="" aria-hidden="true" />
-                <span role="img" aria-label="Vectis AI">vectis<sup>ai</sup></span>
-              </div>
-              <div className="intro-meta">
-                <span className="intro-place">TORONTO · CANADA</span>
-                <a href="#contact" className="intro-cta">Book a discovery call <span aria-hidden="true">→</span></a>
-              </div>
-            </div>
-
             <div className="ball-copy" id="heroText">
               <p className="hero-note"><b>Open</b> Taking on new client projects</p>
               <h1 id="heroH1"><span id="rotBox" style={{ display: 'inline-block', whiteSpace: 'nowrap' }}><span id="rotWord" style={{ display: 'inline-block', transformOrigin: 'left bottom', transition: 'opacity .3s ease', opacity: '1' }}>Same</span></span> team.<br /><span id="rotTail" style={{ display: 'inline-block', transition: 'opacity .3s ease', opacity: '1' }}>Bigger <em>possibilities.</em></span></h1>
@@ -276,6 +279,19 @@ export default function HomePage() {
           <ScrollHook eyebrow="AND HOW DOES IT GET BUILT" line="Four steps, so you know what you are agreeing to before you agree to it." />
 
           <ProcessRail />
+
+          {/* The rail ends on "Build & own", so the ask belongs here rather than
+              a thousand pixels further down: step one is the call. */}
+          <div className="cta-wrap">
+          <div id="ctaBanner" data-reveal="1" style={{ background: '#d3d7e9', borderRadius: '16px', padding: '40px 48px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '40px' }}>
+            <div>
+              <div style={{ fontSize: '12px', letterSpacing: '.16em', color: '#2a2360', fontWeight: '600', marginBottom: '10px' }}>STEP ONE STARTS HERE</div>
+              <h3 style={{ fontSize: '28px', fontWeight: '700', letterSpacing: '-.02em', margin: '0 0 8px' }}>Book a free 30-minute discovery call</h3>
+              <p style={{ fontSize: '15px', color: '#4a4f70', margin: '0', lineHeight: '1.6' }}>No prep, no commitment. Bring one workflow that eats your team's time and leave with a clear plan.</p>
+            </div>
+            <a href="#contact" style={{ flexShrink: '0', display: 'inline-flex', alignItems: 'center', gap: '12px', background: '#1a1740', color: '#f2f5fb', borderRadius: '999px', padding: '18px 32px', fontSize: '16px', fontWeight: '700', transition: 'transform .2s, background .2s' }} className="hv5">Book a discovery call <span style={{ fontSize: '18px' }}>→</span></a>
+          </div>
+          </div>
 
           <ScrollHook eyebrow="AND WHAT DOES IT TAKE TO START" line="Nothing. It connects to the tools you already run." />
 

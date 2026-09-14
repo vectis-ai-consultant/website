@@ -247,3 +247,10 @@ h2[data-words][data-in] span{opacity:1;transform:none}
   .scroll-hook-rule,.scroll-hook-cue{animation:none}
   .scroll-hook-rule{transform:none}
 }
+
+/* The discovery-call ask, closing the four steps. */
+.cta-wrap{position:relative;z-index:2;max-width:1200px;margin:0 auto;padding:0 56px}
+@media (max-width:900px){
+  .cta-wrap{padding:0 22px}
+  #ctaBanner{flex-direction:column;align-items:flex-start;gap:24px;padding:30px 26px}
+}

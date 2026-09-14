@@ -56,8 +56,11 @@ export function orbitState(progress: number) {
     close: smooth(p / 0.2),
     mark: smooth((p - 0.1) / 0.32), // the V fades up inside the shell
     // The problem, told against that held frame.
-    copy: smooth((p - 0.22) / 0.16) * (1 - smooth((p - 0.86) / 0.14)),
-    spin: p * 1.9,                  // radians — monotonic in scroll
+    copy: smooth((p - 0.22) / 0.16) * (1 - smooth((p - 0.93) / 0.07)),
+    // Radians, monotonic in scroll. Fast enough that the ring is visibly
+    // turning while the camera holds still — at the old rate the back half of
+    // the act read as a stalled picture.
+    spin: p * 6,
     frame: smooth((p - 0.52) / 0.34), // only then does the camera back off
     ring: smooth((p - 0.56) / 0.3),   // far enough to hold the ring of tools
   }
@@ -79,6 +82,8 @@ export function leverState(progress: number, tiles = 8) {
     tilt: smooth((p - 0.64) / 0.24),    // the beam tips under the load
     launch: smooth((p - 0.86) / 0.14),  // and the rocket leaves
     pull: smooth((p - 0.06) / 0.55),    // camera settles on the whole machine
-    copy: smooth((p - 0.08) / 0.18),
+    // Early, so there is no silent stretch between this act's caption and the
+    // one the second act just gave up.
+    copy: smooth((p - 0.02) / 0.14),
   }
 }

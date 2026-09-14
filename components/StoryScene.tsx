@@ -377,9 +377,14 @@ export default function StoryScene(
     }
 
     // How far through a pinned section we are: 0 as it locks, 1 as it releases.
-    const run = (sec: HTMLElement) => {
+    // How far a section has travelled, 0 at its top, 1 when it is done. The
+    // usual denominator is the section minus a viewport, which finishes the act
+    // while the last screenful is still going past — fine when there is copy to
+    // read in that window, dead air when there is not. `full` measures against
+    // the whole section instead, so the act ends exactly where the next begins.
+    const run = (sec: HTMLElement, full = false) => {
       const box = sec.getBoundingClientRect()
-      return -box.top / Math.max(1, box.height - innerHeight)
+      return -box.top / Math.max(1, full ? box.height : box.height - innerHeight)
     }
 
     // One pass per scroll frame. Everything the three acts need is derived here
@@ -387,7 +392,7 @@ export default function StoryScene(
     const state = { shatter: 0, gather: 0, solid: 0, spin: 0, ring: 0 }
     const place = () => {
       const s1 = ballState(run(act1))
-      const s2 = orbitState(run(act2))
+      const s2 = orbitState(run(act2, true))
       const p3 = run(act3)
       const s3 = leverState(p3)
       // Past the third act the story is told, but the scene is now the page's
@@ -505,6 +510,8 @@ export default function StoryScene(
       }
       story.style.setProperty('--frame', String(s1.frame))
       story.style.setProperty('--hero', String(s1.hero))
+      // also on the root: the top bar lives outside .story now
+      document.documentElement.style.setProperty('--hero', String(s1.hero))
       story.style.setProperty('--leverage', String(s1.leverage))
       story.style.setProperty('--orbit', String(s2.copy))
       story.style.setProperty('--lever', String(s3.copy))
