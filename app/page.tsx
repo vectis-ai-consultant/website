@@ -3,6 +3,7 @@ import Nav from '@/components/Nav'
 import ProgressBar from '@/components/ProgressBar'
 import BookingFlow from '@/components/BookingFlow'
 import ContactFlow from '@/components/ContactFlow'
+import HoursGrid from '@/components/HoursGrid'
 import ProcessRail from '@/components/ProcessRail'
 import ScrollHook from '@/components/ScrollHook'
 import HomeBehaviors from '@/components/HomeBehaviors'
@@ -84,12 +85,10 @@ export default function HomePage() {
 
             <div className="ball-leverage">
               <h2>Every tool already exists.<br /><em>The hours don&rsquo;t.</em></h2>
-              <p>Your team is not short of software. It is short of the time to run it &mdash; so the work that compounds keeps losing to the work that repeats.</p>
-              <ol className="ball-steps">
-                <li><b>01</b> Follow-ups go out late, or not at all</li>
-                <li><b>02</b> Quotes take a day, so people go elsewhere</li>
-                <li><b>03</b> Content only happens when someone makes room</li>
-              </ol>
+              {/* The three bullets that used to sit here are the labels on the
+                  grid now: the week filling up says it faster than they did. */}
+              <HoursGrid />
+              <p className="ball-note">The work that repeats takes the week. The work that compounds waits.</p>
             </div>
             </div>
           </section>

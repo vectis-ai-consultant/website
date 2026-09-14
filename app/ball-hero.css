@@ -177,6 +177,7 @@
 .ball-leverage h2{margin:0;font-size:clamp(32px,3.6vw,54px);font-weight:500;letter-spacing:-1.6px;line-height:1.05}
 .ball-leverage h2 em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 .ball-leverage p{margin:20px 0 0;font-size:17px;line-height:1.65;color:var(--muted);text-wrap:pretty}
+.ball-note{font-size:15px !important;margin-top:22px !important;max-width:400px}
 .ball-steps{list-style:none;margin:28px 0 0;padding:0;display:flex;flex-direction:column;gap:12px}
 .ball-steps li{display:flex;align-items:center;gap:12px;font-size:15px;color:var(--ink)}
 .ball-steps b{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:#fff;background:var(--ink-2);
@@ -223,7 +224,38 @@
   .ball-sticky{position:relative;height:auto;padding-bottom:52vh}
   .ball-canvas{height:52vh}
   .ball-copy,.ball-leverage{opacity:1;transform:none}
+  /* Nothing drives --leverage here, so the week would sit empty and say the
+     opposite of what it is for. Show it filled. */
+  .ball-leverage{--leverage:1}
   .ball-canvas{position:relative;height:52vh;transform:none}
   .ball-bloom{display:none}
   .ball-leverage{position:relative;top:auto;translate:none;margin:0 auto;padding:0 24px}
+}
+
+/* --- the problem, as a picture ------------------------------------------- */
+/* A week of hours going dark. Everything reads --leverage, the same
+   position-derived value the panel's own fade uses, so the week empties again
+   on the way back up. No transitions: the scroll is the timeline. */
+.hours{margin:26px 0 0}
+.hours-cap,.hours-tags{font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted)}
+.hours-cap{margin:0 0 12px}
+.hours-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;max-width:392px}
+.hours-cell{position:relative;aspect-ratio:1;border-radius:4px;background:#c3d0ea}
+/* One block fills when the week has run past its place in the queue. The 46 is
+   a touch over the 36 blocks that fill, so the last one is solid before the
+   phase ends rather than exactly on it. */
+.hours-cell::after{content:'';position:absolute;inset:0;border-radius:4px;background:var(--ink-2);
+  opacity:clamp(0,calc(var(--leverage) * 46 - var(--o)),1)}
+.hours-tags{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 0;padding:0}
+.hours-tags li{padding:6px 11px;border-radius:999px;background:var(--ink-2);color:#fff;
+  letter-spacing:.12em;opacity:clamp(0,calc(var(--leverage) * 4 - var(--t)),1)}
+@media (max-width:900px){
+  /* Left to fill the column the blocks become huge and shove the headline up
+     under the nav. A week is a week at any size. */
+  .hours-grid{max-width:288px;gap:5px}
+  .hours{margin-top:18px}
+  .hours-tags{gap:6px;margin-top:12px}
+  .hours-tags li{padding:5px 9px}
+  .ball-note{font-size:14px !important;margin-top:16px !important}
 }
