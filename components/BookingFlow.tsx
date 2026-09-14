@@ -52,7 +52,9 @@ export default function BookingFlow() {
 
   if (details) {
     return (
-      <>
+      // The calendar wants the full width; a form does not — five fields spread
+      // over 1200px are harder to read, not easier.
+      <div style={{ maxWidth: 680 }}>
         <h3 style={{ fontSize: 24, fontWeight: 700, letterSpacing: '-.015em', margin: '0 0 8px' }}>
           {booking ? 'Your slot is held.' : 'Start a conversation.'}
         </h3>
@@ -68,7 +70,7 @@ export default function BookingFlow() {
             input ignores a changed defaultValue. Keying on the address remounts
             it once, whichever order they come in. */}
         <EnquiryForm key={booking?.email ?? ''} booking={booking} />
-      </>
+      </div>
     )
   }
 

@@ -351,7 +351,7 @@ export default function HomePage() {
         {/* A warmer band than the page it sits on, so the ask reads as a change of
             register rather than another section. */}
         <section id="contact" data-reveal="1" style={{ background: '#d3d7e9', color: '#1a1740', scrollMarginTop: '0', padding: '0 56px' }}>
-          <div id="contactGrid" style={{ maxWidth: '1200px', margin: '0 auto', padding: '96px 0 104px', display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1.05fr)', gap: '64px', alignItems: 'start' }}>
+          <div id="contactGrid" style={{ maxWidth: '1200px', margin: '0 auto', padding: '96px 0 56px', display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1.05fr)', gap: '64px', alignItems: 'start' }}>
 
             <div>
               <p style={{ fontFamily: 'ui-monospace,Menlo,monospace', fontSize: '12px', letterSpacing: '.14em', textTransform: 'uppercase', color: '#707793', margin: '0 0 26px' }}>Let&rsquo;s make room for better work.</p>
@@ -382,15 +382,9 @@ export default function HomePage() {
               </p>
             </div>
 
-            {/* home.css targets [data-enquiry] form to collapse the grid at 720px;
-                legacy enquiry.js rendered into this wrapper, so keep it. */}
-            <div data-enquiry="1" style={{ background: '#fbfcff', border: '1px solid #c8cde0', borderRadius: '16px', padding: '36px 38px' }}>
-              <BookingFlow />
-            </div>
-
             {/* A second panel under the form: what the 30 minutes actually contain,
                 so booking one is a known quantity rather than an open-ended call. */}
-            <div style={{ gridColumn: '2', background: '#e6e8f2', border: '1px solid #c4c9de', borderRadius: '16px', padding: '30px 32px', marginTop: '20px' }} id="callPanel">
+            <div style={{ gridColumn: '2', background: '#e6e8f2', border: '1px solid #c4c9de', borderRadius: '16px', padding: '30px 32px' }} id="callPanel">
               <p style={{ fontSize: '12px', fontWeight: '600', letterSpacing: '.14em', textTransform: 'uppercase', color: '#1a1740', margin: '0 0 20px' }}>What the call looks like</p>
               <ol style={{ listStyle: 'none', margin: '0', padding: '0', display: 'grid', gap: '14px' }}>
                 {[
@@ -405,6 +399,18 @@ export default function HomePage() {
                 ))}
               </ol>
               <p style={{ fontSize: '13px', color: '#7b83a8', margin: '22px 0 0', paddingTop: '20px', borderTop: '1px solid #c4c9de' }}>Prefer email?<br /><a href="mailto:meetvectis@gmail.com" style={{ color: '#4a4f70', borderBottom: '1px solid #cdd8ee' }}>meetvectis@gmail.com</a></p>
+            </div>
+          </div>
+
+          {/* The calendar gets the whole column rather than half of one: Cal
+              lays the event, the month and the free times side by side once it
+              has the width, and squeezed into the old right-hand card it fell
+              back to a single stacked strip.
+              home.css targets [data-enquiry] form to collapse the grid at 720px;
+              legacy enquiry.js rendered into this wrapper, so keep it. */}
+          <div id="bookWrap" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 0 104px' }}>
+            <div data-enquiry="1" style={{ background: '#fbfcff', border: '1px solid #c8cde0', borderRadius: '16px', padding: '36px 38px' }}>
+              <BookingFlow />
             </div>
           </div>
         </section>

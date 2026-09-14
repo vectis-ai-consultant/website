@@ -129,6 +129,9 @@ h2[data-words][data-in] span{opacity:1;transform:none}
 /* One column before the 320 + 720 grid would start squeezing the form. */
 @media (max-width:1120px){
   #contactGrid{grid-template-columns:1fr !important;gap:36px !important}
+  /* The calendar needs every pixel it can get on a phone, so the card it sits
+     in gives up most of its padding. */
+  #bookWrap [data-enquiry]{padding:22px 16px !important}
   #callPanel{grid-column:1 !important;margin-top:0 !important}
   #contactSteps{display:grid !important;grid-template-columns:1fr 1fr !important;
     border-left:0 !important;column-gap:32px !important;row-gap:26px !important}
