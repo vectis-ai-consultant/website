@@ -43,8 +43,8 @@ export default function HomePage() {
             with it, and they were painted under the docked nav. */}
         <div id="introTopBar">
           <div className="intro-brand">
-            <img src="/assets/logos/vectis-lambda.png" alt="" aria-hidden="true" />
-            <span role="img" aria-label="Vectis AI">vectis<sup>ai</sup></span>
+            {/* The real lockup, not a mark beside a typed wordmark. */}
+            <img src="/assets/logos/vectis-lockup.png" alt="Vectis AI" />
           </div>
           <div className="intro-meta">
             <span className="intro-place">TORONTO · CANADA</span>

@@ -88,7 +88,8 @@
 .intro-brand::before{content:'';position:absolute;inset:-9px -20px;border-radius:999px;z-index:-1;
   background:#fbfcfe;opacity:calc(1 - var(--hero));
   box-shadow:0 4px 14px rgba(26,23,64,calc(.12 * (1 - var(--hero))))}
-.intro-brand img{width:32px;height:32px;object-fit:contain;display:block}
+/* One image now, so it is sized by height and the width follows the artwork. */
+.intro-brand img{height:27px;width:auto;display:block}
 .intro-brand span{font-size:24px;font-weight:700;letter-spacing:-.035em;color:var(--ink);
   display:inline-flex;align-items:flex-start;gap:2px;line-height:1}
 .intro-brand sup{font-size:.46em;font-weight:600;letter-spacing:0;line-height:1;margin-top:.12em;
@@ -197,8 +198,7 @@
      The nav keeps its hero position (data-dock='1' is the low state) and drops
      to a second row once it rises to the top. */
   #navBar:not([data-dock='1']){top:78px !important}
-  .intro-brand span{font-size:21px}
-  .intro-brand img{width:27px;height:27px}
+  .intro-brand img{height:23px}
   .intro-cta{padding:10px 15px;font-size:13px;gap:6px}
   .ball-copy{padding:112px 26px 0}
     /* The ball lifts instead of stepping aside, so the copy takes the lower

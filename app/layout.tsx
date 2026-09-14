@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   },
   description:
     'Vectis AI is a Toronto AI consulting firm. We build AI agents, social-media automation, website chatbots and corporate AI training into the systems you already run.',
-  icons: { icon: '/assets/logos/vectis-lambda.png' },
+  icons: { icon: '/assets/logos/vectis-mark.png' },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
