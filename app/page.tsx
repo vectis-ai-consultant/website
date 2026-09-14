@@ -138,7 +138,7 @@ export default function HomePage() {
 
           <section id="services" data-reveal="1" style={{ padding: '60px 56px 40px', maxWidth: '1200px', margin: '0 auto', scrollMarginTop: '110px' }}>
             <div style={{ display: 'flex', alignItems: 'flex-end', gap: '28px', marginBottom: '28px' }}>
-              <span data-num="1" style={{ fontSize: '120px', fontWeight: '300', lineHeight: '.8', color: '#dbe3f3', fontFamily: 'Georgia,serif', letterSpacing: '-.02em' }}>01</span>
+              <span data-num="1" style={{ fontSize: '120px', fontWeight: '300', lineHeight: '.8', color: '#bcc9e6', fontFamily: 'Georgia,serif', letterSpacing: '-.02em' }}>01</span>
               <span style={{ fontSize: '13px', letterSpacing: '.18em', color: '#1a1740', fontWeight: '600', paddingBottom: '6px' }}>OUR SOLUTION</span>
             </div>
             <h2 id="servicesHead" style={{ fontSize: '52px', fontWeight: '700', letterSpacing: '-.025em', lineHeight: '1.08', margin: '0 0 80px', maxWidth: '760px', textWrap: 'pretty' }}>Four ways we bring AI into your business.</h2>
@@ -297,7 +297,7 @@ export default function HomePage() {
 
           <section id="integration" data-reveal="1" style={{ padding: '0 56px 40px', maxWidth: '1200px', margin: '0 auto', scrollMarginTop: '110px' }}>
             <div style={{ display: 'flex', alignItems: 'flex-end', gap: '28px', marginBottom: '28px' }}>
-              <span data-num="1" style={{ fontSize: '120px', fontWeight: '300', lineHeight: '.8', color: '#dbe3f3', fontFamily: 'Georgia,serif', letterSpacing: '-.02em' }}>03</span>
+              <span data-num="1" style={{ fontSize: '120px', fontWeight: '300', lineHeight: '.8', color: '#bcc9e6', fontFamily: 'Georgia,serif', letterSpacing: '-.02em' }}>03</span>
               <span style={{ fontSize: '13px', letterSpacing: '.18em', color: '#1a1740', fontWeight: '600', paddingBottom: '6px' }}>DAY ONE READINESS</span>
             </div>
             <h2 style={{ fontSize: '36px', fontWeight: '700', letterSpacing: '-.02em', lineHeight: '1.15', margin: '0 0 14px', maxWidth: '640px', textWrap: 'pretty' }}>Connected to everything you already run, on day one.</h2>

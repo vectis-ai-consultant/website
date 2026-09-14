@@ -165,7 +165,7 @@ h2[data-words][data-in] span{opacity:1;transform:none}
   left:50%;width:100vw;transform:translateX(-50%);top:0;bottom:0;
   background:linear-gradient(180deg,transparent 0%,rgba(231,211,176,.12) 14%,rgba(230,204,159,.2) 46%,rgba(231,211,176,.12) 84%,transparent 100%)}
 .rail-head{display:flex;align-items:flex-end;gap:24px;margin-bottom:22px}
-.rail-bignum{font-size:120px;font-weight:300;line-height:.8;color:#dbe3f3;font-family:Georgia,serif;letter-spacing:-.02em}
+.rail-bignum{font-size:120px;font-weight:300;line-height:.8;color:#bcc9e6;font-family:Georgia,serif;letter-spacing:-.02em}
 .rail-eyebrow{font-size:13px;letter-spacing:.18em;color:#1a1740;font-weight:600;padding-bottom:6px}
 /* Narrower than a full-width section head, because it now shares the column
    with the artefact and has to stay on screen alongside it. */
