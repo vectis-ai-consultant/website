@@ -164,23 +164,26 @@ export default function HomePage() {
               <div className="ev-grid">
                 <article className="ev-cell">
                   <span className="ev-idx">001 / Measured result</span>
-                  <strong className="ev-fig">40%</strong>
+                  <strong className="ev-fig">10<span className="ev-unit">hrs</span></strong>
                   <span className="ev-rule" />
-                  <p className="ev-claim">of workers spend at least a quarter of the week on manual, repetitive tasks — email, data collection, data entry.</p>
+                  <p className="ev-claim">a week, at minimum, goes to manual and repetitive work — email, data collection, data entry. More than four in ten workers spend at least that much.</p>
+                  <p className="ev-basis">A quarter of a 40-hour week · Smartsheet measured &gt;40% of workers</p>
                   <a className="ev-src" href="https://www.smartsheet.com/content-center/product-news/automation/workers-waste-quarter-work-week-manual-repetitive-tasks" target="_blank" rel="noopener noreferrer">Source: Smartsheet<i>↗</i></a>
                 </article>
                 <article className="ev-cell">
                   <span className="ev-idx">002 / Measured result</span>
-                  <strong className="ev-fig">60%</strong>
+                  <strong className="ev-fig">12<span className="ev-unit">hrs</span></strong>
                   <span className="ev-rule" />
-                  <p className="ev-claim">of US jobs have 30% or more of their activities already automatable — the tasks inside the role, not the role itself.</p>
+                  <p className="ev-claim">a week is already automatable in six of every ten US jobs — the tasks inside the role, not the role itself.</p>
+                  <p className="ev-basis">30% of a 40-hour week · MGI measured 60% of US jobs at 30% or more</p>
                   <a className="ev-src" href="https://www.mckinsey.com/mgi/media-center/how-many-of-your-daily-tasks-could-be-automated" target="_blank" rel="noopener noreferrer">Source: McKinsey Global Institute<i>↗</i></a>
                 </article>
                 <article className="ev-cell">
                   <span className="ev-idx">003 / Measured result</span>
-                  <strong className="ev-fig">70%</strong>
+                  <strong className="ev-fig">7<span className="ev-unit">in 10</span></strong>
                   <span className="ev-rule" />
-                  <p className="ev-claim">of transformation programmes miss their objectives. The root causes are consistent, and they are rarely the technology.</p>
+                  <p className="ev-claim">transformation programmes miss their objectives. The root causes are consistent, and they are rarely the technology.</p>
+                  <p className="ev-basis">Roughly 70% of programmes · a rate that has held for decades</p>
                   <a className="ev-src" href="https://www.mckinsey.com/capabilities/people-and-organization/our-insights/why-do-most-transformations-fail-a-conversation-with-harry-robinson" target="_blank" rel="noopener noreferrer">Source: McKinsey &amp; Company<i>↗</i></a>
                 </article>
               </div>

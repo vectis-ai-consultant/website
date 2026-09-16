@@ -346,9 +346,18 @@ h2[data-words][data-in] span{opacity:1;transform:none}
   color:rgba(226,231,255,.38)}
 .ev-fig{display:block;margin-top:20px;font-weight:700;letter-spacing:-.04em;
   font-size:clamp(42px,5.2vw,74px);line-height:.95;color:#93a8ff}
+/* The unit rides with the figure rather than under it: "10 hrs" is one thing a
+   reader can picture, where a bare 10 is not. Sized off the figure so it tracks
+   the clamp instead of needing a clamp of its own. */
+.ev-unit{font-size:.4em;font-weight:600;letter-spacing:-.01em;margin-left:.16em;
+  color:rgba(147,168,255,.72)}
 .ev-rule{display:block;height:1px;margin:20px 0 18px;background:rgba(147,168,255,.42)}
 .ev-claim{margin:0;font-size:clamp(14.5px,1.25vw,17.5px);line-height:1.45;
   color:#eef1fb;text-wrap:pretty}
+/* Hours are arithmetic on a published percentage, so the arithmetic is printed
+   next to the number. ADR-0007: a derived figure shows its working. */
+.ev-basis{margin:14px 0 0;font:600 10.5px/1.6 ui-monospace,Menlo,monospace;
+  letter-spacing:.09em;text-transform:uppercase;color:rgba(226,231,255,.34)}
 .ev-src{display:inline-block;margin-top:auto;padding-top:22px;font-size:12.5px;
   line-height:1.45;color:rgba(226,231,255,.48);text-decoration:none;
   transition:color .18s}

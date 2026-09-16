@@ -141,3 +141,31 @@ three rules are unchanged in substance**: every figure links to its source, ever
 carries a `Measured` label, and the footer still says in words that this is published
 research and not client results. The figures and sources in the previous amendment are
 untouched.
+
+---
+
+## Amendment — figures are hours, and a derived figure shows its working (2026-09-16)
+
+The client asked for the percentages to become something a reader can picture. A
+percentage is a ratio and needs a denominator the reader supplies themselves; an
+hours figure does not. So:
+
+| | Was | Is | Arithmetic |
+|---|---|---|---|
+| 001 | 40% of workers, a quarter of the week | **10 hrs** a week | a quarter of a 40-hour week |
+| 002 | 60% of US jobs, 30% of activities | **12 hrs** a week | 30% of a 40-hour week |
+| 003 | 70% of programmes | **7 in 10** | the same rate, counted rather than rated |
+
+**A fourth rule joins the three.** A figure that is not stated verbatim by its source
+prints its arithmetic on the cell, in the `.ev-basis` line, including the source's own
+number. 001 reads `A QUARTER OF A 40-HOUR WEEK · SMARTSHEET MEASURED >40% OF WORKERS`.
+A reader who disagrees with the 40-hour basis can see it and redo the sum; a reader who
+wants the original percentage does not have to open the source to find it.
+
+The 40-hour week is the assumption doing the work here, and it is the reason the rule
+exists. It is a convention, not a measurement, and it is stated as one rather than
+buried. Nothing about the underlying research changed — the sources, and the figures
+they publish, are exactly those in the previous amendment.
+
+This does not loosen ADR-0001. These are still published research about work in
+general, not Vectis outcomes, and the footer still says so.
