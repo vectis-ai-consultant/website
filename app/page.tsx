@@ -160,35 +160,35 @@ export default function HomePage() {
             <div className="ev-inner">
               <span className="ev-eyebrow">Why the diagnosis comes first</span>
               <h2>The waste is measurable.<br /><em>So is the failure rate.</em></h2>
-              <p className="ev-lede">Most of the waste sits inside existing roles, not in whole jobs. And most programmes that set out to fix it still miss their objectives. That is a diagnostic problem — so we measure before we build.</p>
+              <p className="ev-lede">Most of the waste sits inside work people already do, not in whole jobs. And most projects that set out to fix it still miss what they promised. So we measure first, then build.</p>
               <div className="ev-grid">
                 <article className="ev-cell">
                   <span className="ev-idx">001 / Measured result</span>
                   <strong className="ev-fig">10<span className="ev-unit">hrs</span></strong>
                   <span className="ev-rule" />
-                  <p className="ev-claim">a week, at minimum, goes to manual and repetitive work — email, data collection, data entry. More than four in ten workers spend at least that much.</p>
-                  <p className="ev-basis">A quarter of a 40-hour week · Smartsheet measured &gt;40% of workers</p>
+                  <p className="ev-claim">a week goes to manual, repetitive work. Email. Data collection. Data entry. More than four in ten workers lose at least this much.</p>
+                  <p className="ev-basis">A quarter of a 40-hour week. Smartsheet measured over 40% of workers.</p>
                   <a className="ev-src" href="https://www.smartsheet.com/content-center/product-news/automation/workers-waste-quarter-work-week-manual-repetitive-tasks" target="_blank" rel="noopener noreferrer">Source: Smartsheet<i>↗</i></a>
                 </article>
                 <article className="ev-cell">
                   <span className="ev-idx">002 / Measured result</span>
                   <strong className="ev-fig">12<span className="ev-unit">hrs</span></strong>
                   <span className="ev-rule" />
-                  <p className="ev-claim">a week is already automatable in six of every ten US jobs — the tasks inside the role, not the role itself.</p>
-                  <p className="ev-basis">30% of a 40-hour week · MGI measured 60% of US jobs at 30% or more</p>
+                  <p className="ev-claim">a week can already be automated in six of every ten US jobs. That is tasks inside the job, not the job itself.</p>
+                  <p className="ev-basis">30% of a 40-hour week. MGI measured 60% of US jobs at 30% or more.</p>
                   <a className="ev-src" href="https://www.mckinsey.com/mgi/media-center/how-many-of-your-daily-tasks-could-be-automated" target="_blank" rel="noopener noreferrer">Source: McKinsey Global Institute<i>↗</i></a>
                 </article>
                 <article className="ev-cell">
                   <span className="ev-idx">003 / Measured result</span>
                   <strong className="ev-fig">7<span className="ev-unit">in 10</span></strong>
                   <span className="ev-rule" />
-                  <p className="ev-claim">transformation programmes miss their objectives. The root causes are consistent, and they are rarely the technology.</p>
-                  <p className="ev-basis">Roughly 70% of programmes · a rate that has held for decades</p>
+                  <p className="ev-claim">change projects fail to deliver what they promised. The reasons repeat, and they are almost never the technology.</p>
+                  <p className="ev-basis">Roughly 70% of programmes. The rate has held for decades.</p>
                   <a className="ev-src" href="https://www.mckinsey.com/capabilities/people-and-organization/our-insights/why-do-most-transformations-fail-a-conversation-with-harry-robinson" target="_blank" rel="noopener noreferrer">Source: McKinsey &amp; Company<i>↗</i></a>
                 </article>
               </div>
               <div className="ev-foot">
-                <span><i className="ev-dot" />Published research — not client results</span>
+                <span><i className="ev-dot" />Published research, not client results</span>
                 <span>Every figure links to its source</span>
               </div>
             </div>
