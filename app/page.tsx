@@ -159,24 +159,24 @@ export default function HomePage() {
               <div className="ev-grid">
                 <article className="ev-cell">
                   <span className="ev-idx">001 / Measured</span>
-                  <strong className="ev-fig">6 hrs</strong>
+                  <strong className="ev-fig">40%</strong>
                   <span className="ev-rule" />
-                  <p className="ev-claim">a week or more is what 59% of workers say they would get back if their repetitive tasks were automated.</p>
+                  <p className="ev-claim">of workers spend at least a quarter of the week on manual, repetitive tasks — email, data collection, data entry.</p>
                   <a className="ev-src" href="https://www.smartsheet.com/content-center/product-news/automation/workers-waste-quarter-work-week-manual-repetitive-tasks" target="_blank" rel="noopener noreferrer">Source: Smartsheet<i>↗</i></a>
                 </article>
                 <article className="ev-cell">
                   <span className="ev-idx">002 / Measured</span>
-                  <strong className="ev-fig">7×</strong>
+                  <strong className="ev-fig">60%</strong>
                   <span className="ev-rule" />
-                  <p className="ev-claim">more likely to qualify a lead when you reach it inside the hour. Nearly a quarter of firms never reply at all.</p>
-                  <a className="ev-src" href="https://hbr.org/2011/03/the-short-life-of-online-sales-leads" target="_blank" rel="noopener noreferrer">Source: Harvard Business Review<i>↗</i></a>
+                  <p className="ev-claim">of US jobs have 30% or more of their activities already automatable — the tasks inside the role, not the role itself.</p>
+                  <a className="ev-src" href="https://www.mckinsey.com/mgi/media-center/how-many-of-your-daily-tasks-could-be-automated" target="_blank" rel="noopener noreferrer">Source: McKinsey Global Institute<i>↗</i></a>
                 </article>
                 <article className="ev-cell">
                   <span className="ev-idx">003 / Measured</span>
-                  <strong className="ev-fig">95%</strong>
+                  <strong className="ev-fig">70%</strong>
                   <span className="ev-rule" />
-                  <p className="ev-claim">of enterprise generative-AI pilots return nothing measurable. The gap is integration and training, not the models.</p>
-                  <a className="ev-src" href="https://fortune.com/2025/08/18/mit-report-95-percent-generative-ai-pilots-at-companies-failing-cfo/" target="_blank" rel="noopener noreferrer">Source: MIT Project NANDA<i>↗</i></a>
+                  <p className="ev-claim">of transformation programmes miss their objectives. The root causes are consistent, and they are rarely the technology.</p>
+                  <a className="ev-src" href="https://www.mckinsey.com/capabilities/people-and-organization/our-insights/why-do-most-transformations-fail-a-conversation-with-harry-robinson" target="_blank" rel="noopener noreferrer">Source: McKinsey &amp; Company<i>↗</i></a>
                 </article>
               </div>
               <div className="ev-foot">

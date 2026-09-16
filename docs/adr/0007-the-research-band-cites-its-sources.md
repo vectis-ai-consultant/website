@@ -75,3 +75,42 @@ better fit for what was asked for.
 **Client results instead of research.** There are none that a client has agreed to
 publish. When there are, they belong in a case study with the client named, not in an
 anonymous statistic.
+
+---
+
+## Amendment — the three figures change, the three rules do not (2026-09-16)
+
+The client asked for the band to carry the figures used by aicubed.com. The table in
+the Decision above is superseded by:
+
+| | Figure | Claim | Source |
+|---|---|---|---|
+| 001 | 40% | of workers spend at least a quarter of the week on manual, repetitive tasks — email, data collection, data entry | Smartsheet, *Automation in the Workplace* (2017) |
+| 002 | 60% | of US jobs have 30% or more of their activities already automatable | McKinsey Global Institute, *How many of your daily tasks could be automated?* |
+| 003 | 70% | of transformation programmes miss their objectives | McKinsey & Company, *Why do most transformations fail? A conversation with Harry Robinson* (2019) |
+
+The three rules are unchanged and still hold: every figure links to its source, every
+cell is labelled `Measured`, and the footer says in words that this is published
+research and not client results. Nothing here is a Vectis outcome, so ADR-0001 is not
+engaged.
+
+**Every figure was read back from its primary source before being published**, rather
+than taken on the reference site's word:
+
+- Smartsheet states "Over 40% of workers surveyed spend at least a quarter of their
+  work week on manual, repetitive tasks" — so 40% is conservative against the source.
+- MGI states "for 60% of existing US jobs, 30% or more of current work activities can
+  be automated". The reference site renders this as "of jobs"; ours says "of US jobs",
+  because that is what the source measured.
+- The McKinsey interview states "roughly 70 percent fail". Its published URL now
+  redirects `people-and-organizational-performance` → `people-and-organization`; we
+  cite the destination so the link does not depend on a redirect surviving.
+
+The claim sentences are written in our own voice. The figures and the sources are
+matters of fact and are the client's ask; a competitor's phrasing of them is their
+copy, and is not ours to lift.
+
+The two figures this displaces — HBR on lead response time, and MIT Project NANDA on
+generative-AI pilots returning nothing measurable — were not withdrawn for being
+wrong. They are still sound, and 95% in particular stood directly under this section's
+own headline. Recorded here in case the band is ever widened past three.
