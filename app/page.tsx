@@ -1,9 +1,11 @@
 import Link from 'next/link'
+import { INDUSTRIES } from '@/lib/industries'
 import Nav from '@/components/Nav'
 import ProgressBar from '@/components/ProgressBar'
 import BookingFlow from '@/components/BookingFlow'
 import ContactFlow from '@/components/ContactFlow'
-import InboxStack from '@/components/InboxStack'
+import DotField from '@/components/DotField'
+import ProblemVoices from '@/components/ProblemVoices'
 import ProcessRail from '@/components/ProcessRail'
 import ScrollHook from '@/components/ScrollHook'
 import HomeBehaviors from '@/components/HomeBehaviors'
@@ -57,6 +59,7 @@ export default function HomePage() {
               back out of the flow, so the three acts scroll over it. */}
           <div className="story-stage" aria-hidden="true">
             <div className="hero-bleed" />
+            <DotField />
             <div className="ball-bloom" />
             <StoryScene storyId="story" act1Id="intro" act2Id="orbit" act3Id="lever" />
           </div>
@@ -83,22 +86,49 @@ export default function HomePage() {
               <p className="hero-claim">The only business AI consulting you need.</p>
             </div>
 
-            <div className="ball-leverage">
-              <h2>The leads are already there.<br /><em>The answers aren&rsquo;t.</em></h2>
-              {/* The bullets that used to sit here are the inbox now: watching it
-                  stack up says it faster than three lines of prose did. */}
-              <InboxStack />
-              <p className="ball-note">Every hour a lead waits, it cools &mdash; and most of that pile is the same four questions. Answer all of it, with the team you already have.</p>
-            </div>
+            {/* The problem as a dozen things said out loud, drifting around the
+                ball, rather than as one panel beside it. */}
+            <ProblemVoices />
             </div>
           </section>
 
           <section id="orbit" className="orbit-stage">
             <div className="act-sticky">
+              {/* The answer to act one — not by what we build, but by who it is
+                  for. It sits in the frame rather than inside .orbit-copy: as part
+                  of the caption it made that block tall enough to white out the
+                  lower two thirds of the scene, which is what made the act read as
+                  two pages stacked.
+
+                  Built from INDUSTRIES rather than written out, so the deck, the
+                  hub at /industries and the eight inner pages cannot drift apart.
+                  Eight cards where there were four, so each carries a name and one
+                  promise instead of a paragraph and an instrument panel — see
+                  deckAt in lib/ball-state.ts for the pacing that buys. */}
+              <div className="svc-rail">
+              <ul className="svc-deck">
+                {INDUSTRIES.map((ind, i) => (
+                  <li key={ind.slug} className="svc"
+                      style={{ ['--i' as string]: i, ['--a' as string]: `var(--sys-${i + 1})` }}>
+                    <span className="svc-num">{String(i + 1).padStart(3, '0')} / Industry</span>
+                    <span className="svc-name">{ind.name}</span>
+                    <i className="svc-rule" />
+                    <span className="svc-kills">{ind.promise}</span>
+                    <span className="svc-meta">{ind.wins[0]}<b className="svc-go">Explore →</b></span>
+                    {/* The hit area, over the whole card. It is a bare overlay
+                        rather than a wrapper around the content because it has to
+                        shrink with --a (see .svc-hit) and wrapping the content
+                        would shrink the text with it. */}
+                    <Link className="svc-hit" href={`/industry/${ind.slug}`}
+                          aria-label={`${ind.name} — ${ind.promise}`} />
+                  </li>
+                ))}
+              </ul>
+              </div>
               <div className="act-copy orbit-copy">
-                <span className="act-num">02 — WHAT WE DO ABOUT IT</span>
-                <h2>You bring the ambition.<br /><em>We bring the leverage.</em></h2>
-                <p>Your people, your tools, more room to move. We build AI into the systems you already operate &mdash; no migration, no new logins, nothing for your team to learn first.</p>
+                <span className="act-num">02 — INDUSTRY APPLICATIONS</span>
+                <h2>Built around how your<br /><em>industry actually works.</em></h2>
+                <Link className="orbit-all" href="/industries">View all industries →</Link>
               </div>
             </div>
           </section>
@@ -117,6 +147,44 @@ export default function HomePage() {
               sticky for as long as its container runs, so stretching the
               container is what carries one scene behind every section. */}
 
+
+          {/* The case for the story, in numbers we did not make up. ADR-0001 rules
+              out unverified outcome metrics and invented client results, so every
+              figure here is published research with its source one click away, and
+              the band says so in its own footer. See docs/adr/0007. */}
+          <section id="evidence" className="ev" data-reveal="1">
+            <div className="ev-inner">
+              <span className="ev-eyebrow">Published research</span>
+              <h2>Using AI is easy.<br /><em>Getting a measurable result is not.</em></h2>
+              <div className="ev-grid">
+                <article className="ev-cell">
+                  <span className="ev-idx">001 / Measured</span>
+                  <strong className="ev-fig">6 hrs</strong>
+                  <span className="ev-rule" />
+                  <p className="ev-claim">a week or more is what 59% of workers say they would get back if their repetitive tasks were automated.</p>
+                  <a className="ev-src" href="https://www.smartsheet.com/content-center/product-news/automation/workers-waste-quarter-work-week-manual-repetitive-tasks" target="_blank" rel="noopener noreferrer">Source: Smartsheet<i>↗</i></a>
+                </article>
+                <article className="ev-cell">
+                  <span className="ev-idx">002 / Measured</span>
+                  <strong className="ev-fig">7×</strong>
+                  <span className="ev-rule" />
+                  <p className="ev-claim">more likely to qualify a lead when you reach it inside the hour. Nearly a quarter of firms never reply at all.</p>
+                  <a className="ev-src" href="https://hbr.org/2011/03/the-short-life-of-online-sales-leads" target="_blank" rel="noopener noreferrer">Source: Harvard Business Review<i>↗</i></a>
+                </article>
+                <article className="ev-cell">
+                  <span className="ev-idx">003 / Measured</span>
+                  <strong className="ev-fig">95%</strong>
+                  <span className="ev-rule" />
+                  <p className="ev-claim">of enterprise generative-AI pilots return nothing measurable. The gap is integration and training, not the models.</p>
+                  <a className="ev-src" href="https://fortune.com/2025/08/18/mit-report-95-percent-generative-ai-pilots-at-companies-failing-cfo/" target="_blank" rel="noopener noreferrer">Source: MIT Project NANDA<i>↗</i></a>
+                </article>
+              </div>
+              <div className="ev-foot">
+                <span><i className="ev-dot" />Published research — not client results</span>
+                <span>Every figure links to its source</span>
+              </div>
+            </div>
+          </section>
 
           {CLIENTS.length > 0 && (
             <section id="clients" data-reveal="1" style={{ padding: '20px 56px 60px', maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>

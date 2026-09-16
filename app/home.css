@@ -308,3 +308,50 @@ h2[data-words][data-in] span{opacity:1;transform:none}
   .cflow-note{max-width:none}
   .cflow-foot{margin-top:40px}
 }
+
+/* --- the case, in published numbers --------------------------------------
+   A dark band between the story and the services. Two things it has to do at
+   once: carry the claim that AI only pays when it is integrated properly, and
+   be obviously honest about where the numbers come from. ADR-0001 rules out
+   unverified outcome metrics and invented client results, so each figure is
+   published research, each links to its source, and the footer says in as many
+   words that none of it is ours. See docs/adr/0007.
+
+   Built from rules rather than boxes: a hairline grid, mono small-caps labels,
+   one accent on the figure and the rule under it. Nothing is filled. */
+.ev{background:#0d0b1c;color:#f2f4fb;position:relative;z-index:1;
+  padding:clamp(60px,9vh,102px) 0}
+.ev-inner{max-width:1200px;margin:0 auto;padding:0 clamp(20px,5vw,56px)}
+.ev-eyebrow{display:block;font:600 11px/1 ui-monospace,Menlo,monospace;
+  letter-spacing:.24em;text-transform:uppercase;color:rgba(226,231,255,.42)}
+.ev h2{margin:20px 0 42px;max-width:19ch;font-weight:600;letter-spacing:-.03em;
+  font-size:clamp(26px,3.3vw,44px);line-height:1.14;text-wrap:balance}
+.ev h2 em{font-style:normal;color:#93a8ff}
+.ev-grid{display:grid;grid-template-columns:repeat(3,1fr);
+  border:1px solid rgba(255,255,255,.12)}
+.ev-cell{display:flex;flex-direction:column;padding:clamp(22px,2.9vw,36px);
+  border-left:1px solid rgba(255,255,255,.12)}
+.ev-cell:first-child{border-left:0}
+.ev-idx{font:600 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.1em;
+  color:rgba(226,231,255,.38)}
+.ev-fig{display:block;margin-top:20px;font-weight:700;letter-spacing:-.04em;
+  font-size:clamp(42px,5.2vw,74px);line-height:.95;color:#93a8ff}
+.ev-rule{display:block;height:1px;margin:20px 0 18px;background:rgba(147,168,255,.42)}
+.ev-claim{margin:0;font-size:clamp(14.5px,1.25vw,17.5px);line-height:1.45;
+  color:#eef1fb;text-wrap:pretty}
+.ev-src{display:inline-block;margin-top:auto;padding-top:22px;font-size:12.5px;
+  line-height:1.45;color:rgba(226,231,255,.48);text-decoration:none;
+  transition:color .18s}
+.ev-src:hover,.ev-src:focus-visible{color:#93a8ff}
+.ev-src i{font-style:normal;margin-left:4px}
+.ev-foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  margin-top:18px;font:600 10.5px/1.6 ui-monospace,Menlo,monospace;
+  letter-spacing:.2em;text-transform:uppercase;color:rgba(226,231,255,.38)}
+.ev-foot span{display:flex;align-items:center;gap:9px}
+.ev-dot{width:5px;height:5px;border-radius:50%;background:#93a8ff;flex:0 0 auto}
+@media (max-width:860px){
+  .ev-grid{grid-template-columns:1fr}
+  .ev-cell{border-left:0;border-top:1px solid rgba(255,255,255,.12)}
+  .ev-cell:first-child{border-top:0}
+  .ev-foot{flex-direction:column;gap:9px}
+}

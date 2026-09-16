@@ -112,8 +112,57 @@ export default function StoryScene(
       color: 0xffffff, transparent: true, opacity: 0.16,
       roughness: 0.12, metalness: 0, clearcoat: 1, clearcoatRoughness: 0.08,
       sheen: 1, sheenColor: new THREE.Color(0xffd7c2), sheenRoughness: 0.4,
+      // A thin film, which is what this is: the colour that runs round the shell
+      // comes from the thickness of the wall rather than from a tint, so it moves
+      // with the view the way it does on a bubble.
+      iridescence: 0.7, iridescenceIOR: 1.3, iridescenceThicknessRange: [120, 380],
       depthWrite: false, side: THREE.FrontSide,
     })
+
+    // The room the shell reflects.
+    //
+    // `clearcoat` and `sheen` above are reflection terms, and until now there was
+    // no environment in the scene at all — so they had nothing to reflect and the
+    // shell was carried entirely by three analytic lights on a 16% surface, which
+    // is a painted decal rather than glass. This is built out of the page's own
+    // palette instead of a stock studio: a room the ball is actually standing in
+    // reads as real, a room it was photographed in somewhere else does not. The
+    // window sits where the analytic key already sits, so the specular highlight
+    // and the reflected one agree instead of arguing.
+    const envScene = new THREE.Scene()
+    envScene.add(new THREE.Mesh(
+      new THREE.SphereGeometry(10, 24, 16),
+      new THREE.ShaderMaterial({
+        side: THREE.BackSide,
+        vertexShader: `varying vec3 vP;
+          void main(){ vP = position;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
+        fragmentShader: `varying vec3 vP;
+          void main(){ float h = normalize(vP).y * 0.5 + 0.5;
+            vec3 c = mix(vec3(0.16,0.20,0.44), vec3(0.88,0.92,1.0), smoothstep(0.1,0.8,h));
+            gl_FragColor = vec4(c,1.0); }`,
+      }),
+    ))
+    // Values past 1 are the point: the render target is half-float, so these stay
+    // bright through the blur and give the shell a highlight with a core.
+    const panel = (c: THREE.Color, w: number, h: number, at: THREE.Vector3) => {
+      const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: c }))
+      m.position.copy(at)
+      m.lookAt(0, 0, 0)
+      envScene.add(m)
+    }
+    panel(new THREE.Color(5, 5, 5.4), 6, 8, new THREE.Vector3(-3, 4, 5).multiplyScalar(1.1))
+    panel(new THREE.Color(1.6, 1.05, 0.72), 7, 4, new THREE.Vector3(3.6, -4, 2))
+    const pmrem = new THREE.PMREMGenerator(renderer)
+    const envRT = pmrem.fromScene(envScene, 0.06)
+    pmrem.dispose()
+    // The shell alone, not scene.environment: that would relight the rocket, the
+    // mark and the tool tiles as well, which is not what was asked for. The
+    // intensity is high because opacity scales the reflections down with
+    // everything else on the surface.
+    shellMat.envMap = envRT.texture
+    shellMat.envMapIntensity = 3.2
+
     const shell = new THREE.Mesh(geo, shellMat)
     ball.add(shell)
 
@@ -137,7 +186,7 @@ export default function StoryScene(
       fragmentShader: `varying vec3 vN; varying vec3 vV; uniform float uFade;
         void main(){ float f = pow(1.0 - max(dot(vN,vV),0.0), 3.0);
           vec3 c = mix(vec3(0.55,0.75,1.0), vec3(1.0,0.86,0.74), smoothstep(0.2,0.9,f));
-          gl_FragColor = vec4(c * f * 0.9 * uFade, 1.0); }`,
+          gl_FragColor = vec4(c * f * 0.5 * uFade, 1.0); }`,
     })
     const rim = new THREE.Mesh(new THREE.SphereGeometry(1.03, seg, seg), rimMat)
     ball.add(rim)
@@ -391,7 +440,10 @@ export default function StoryScene(
     // from three positions, so the whole story is reversible by construction.
     const state = { shatter: 0, gather: 0, solid: 0, spin: 0, ring: 0 }
     const place = () => {
-      const s1 = ballState(run(act1))
+      // The phone shows six of the twelve (the rest are display:none), so it runs a
+      // six-voice schedule — otherwise the last one lands a third of the way in and
+      // the rest of the pinned act is dead scroll. Matches leverState's `tiles`.
+      const s1 = ballState(run(act1), innerWidth < 900 ? 6 : 12)
       const s2 = orbitState(run(act2, true))
       const p3 = run(act3)
       const s3 = leverState(p3)
@@ -411,11 +463,32 @@ export default function StoryScene(
       // actually fits it. Worked out from the aspect, it is a no-op at 16:10.
       const tanHalf = Math.tan((camera.fov * Math.PI) / 360)
       const far = Math.max(5.6, 2.5 / (tanHalf * camera.aspect))
-      const radius = mix(mix(mix(s1.radius, 2.9, s2.close), 6.0, s2.frame) * fit, far, s3.pull) * (1 + 0.45 * tail)
+      // In to 2.9 for the caption, back out to 3.6 as the caption leaves, and then
+      // held there for the whole of the deck — `ease` completes at 0.32, where the
+      // track starts. Across the horizontal scroll every term feeding this is
+      // constant, so the shell neither moves nor changes size while the cards run.
+      // Out to 6.0 for the ring once the deck is gone.
+      const radius = mix(mix(mix(mix(s1.radius, 2.9, s2.close), 3.6, s2.ease), 6.0, s2.frame) * fit, far, s3.pull) * (1 + 0.45 * tail)
       const polar = mix(mix(s1.polar, 1.46, s2.frame), 1.4, s3.pull)
-      // Act 2 looks below the ball so it rides above its own caption; act 3
-      // comes back to level, which leaves the lower third to the copy.
-      const lookY = mix(mix(0, -0.5, s2.frame), 0, s3.pull)
+      // Act 2 looks below the ball so it rides above its own caption. Act 3 puts
+      // its caption at the top instead, so it aims above the machine, which
+      // drops the whole rig into the lower two thirds of the frame — the beam
+      // needs the room, and the tiles used to land on top of the words. Measured
+      // off the act's own camera distance rather than fixed: a phone watches the
+      // beam from much further back, where a world-space offset covers far less
+      // of the frame, and the band the caption needs is the same either way.
+      // Act two holds its aim dead centre for the whole of the deck run. It used
+      // to lift to -0.34 over `ease` to clear the cards at the foot, and that lift
+      // was the one thing making the shell travel while the deck slid across it:
+      // two moves at once, and the sideways one is the one being read. `radius`
+      // still opens out over the same window, so the room for the cards comes from
+      // the shell getting smaller in place rather than from it riding up. The
+      // camera only leaves the centre for `frame`, once the deck is gone and the
+      // ring of tools needs the room — and that is deliberately not scaled by
+      // `fit` the way act three's is: on a phone that much lift pushes the mark up
+      // into act one's `.hero-bleed`, which is still painting over the top of this
+      // act, and the V gets cut off by it.
+      const lookY = mix(mix(0, -0.5, s2.frame), far * 0.164, s3.pull)
       camera.position.set(0, radius * Math.cos(polar), radius * Math.sin(polar))
       // The rings are sized off the second act's own framing, so they hold
       // still while the third act dollies the camera back.
@@ -426,7 +499,10 @@ export default function StoryScene(
       // way the second act brings it back to the middle.
       const narrow = camera.aspect < 0.95
       const aside = s1.aside * (1 - s2.centre)
-      ball.position.x = narrow ? 0 : aside * 1.55 * fit
+      // Wide screens now make room for the problems by ringing them around the
+      // shell, so the ball holds the centre instead of sliding out of it. A phone
+      // has no room beside it either way and still lifts it to clear the cards.
+      ball.position.x = 0
       ball.position.y = narrow ? aside * 1.15 * fit : 0
       camera.lookAt(ball.position.x * 0.55 * (1 - s3.pull), ball.position.y * 0.5 + lookY, 0)
 
@@ -513,8 +589,19 @@ export default function StoryScene(
       // also on the root: the top bar lives outside .story now
       document.documentElement.style.setProperty('--hero', String(s1.hero))
       story.style.setProperty('--leverage', String(s1.leverage))
+      s1.problems.forEach((v, i) => story.style.setProperty('--p' + (i + 1), String(v)))
+      s1.exit.forEach((v, i) => story.style.setProperty('--e' + (i + 1), String(v)))
+      story.style.setProperty('--exit-head', String(s1.headExit))
+      story.style.setProperty('--flare', String(s1.flare))
       story.style.setProperty('--orbit', String(s2.copy))
-      story.style.setProperty('--lever', String(s3.copy))
+      // The deck: one number for where the track is, four for how much of the
+      // frame each card has. The track offset is worked out in CSS from --deck
+      // and the card width, so nothing here needs to know how wide a card is at
+      // this viewport.
+      story.style.setProperty('--deck', String(s2.deck))
+      story.style.setProperty('--deck-in', String(s2.deckIn))
+      s2.cards.forEach((v, i) => story.style.setProperty('--sys-' + (i + 1), String(v)))
+      s3.copy.forEach((v, i) => story.style.setProperty('--lever-' + (i + 1), String(v)))
     }
 
     const attr = geo.attributes.position as THREE.BufferAttribute
@@ -606,6 +693,7 @@ export default function StoryScene(
       removeEventListener('scroll', onScroll); removeEventListener('resize', onResize)
       document.removeEventListener('visibilitychange', tick)
       textures.forEach((t) => t.dispose())
+      envRT.dispose()
       renderer.dispose(); geo.dispose(); dotGeo.dispose(); markGeo.dispose(); tileGeo.dispose()
       shardMat.dispose()
       el.removeChild(renderer.domElement)

@@ -19,10 +19,22 @@
   --sky:#dbe6fb; --sky-2:#c9daf8; --sky-3:#e9effc;
   --grad:linear-gradient(112deg,#1a1740 0%,#3a4fae 34%,#6f9bf0 62%,#2a2360 100%);
   --accent-dot:#3a4fae; --accent-2:#3a4fae;
-  --frame:0; --hero:1; --leverage:0; --orbit:0; --lever:0;
-  --hero-h:340vh;
-  /* The three acts end to end: 340vh + 170vh + 380vh. */
-  --story-h:calc(var(--hero-h) + 550vh);
+  --frame:0; --hero:1; --leverage:0; --orbit:0;
+  --lever-1:0; --lever-2:0; --lever-3:0;
+  /* Every channel the bubbles read, declared here and nowhere else. A bubble that
+     reads an undeclared var computes an invalid opacity/transform and falls back
+     to the initial value — twelve of them at full opacity across the hero until
+     the scene's first frame, and permanently with JavaScript off. */
+  --p1:0; --p2:0; --p3:0; --p4:0; --p5:0; --p6:0;
+  --p7:0; --p8:0; --p9:0; --p10:0; --p11:0; --p12:0;
+  --e1:0; --e2:0; --e3:0; --e4:0; --e5:0; --e6:0;
+  --e7:0; --e8:0; --e9:0; --e10:0; --e11:0; --e12:0;
+  --exit-head:0; --flare:0;
+  --sys-1:0; --sys-2:0; --sys-3:0; --sys-4:0; --deck:0; --deck-in:0;
+  --hero-h:480vh;
+  /* The three acts end to end: act two overlaps act one's trailing viewport
+     (see .orbit-stage), so it contributes 170vh - 100vh, and act three 380vh. */
+  --story-h:calc(var(--hero-h) + 450vh);
   position:relative; margin:0;
   /* The stage hangs 100vh past the story (that is what its negative margin
      buys) and would otherwise paint the lever over the section below. Clip,
@@ -48,6 +60,11 @@
    three acts scroll over the top of it. */
 .story-stage{position:sticky;top:0;height:100vh;margin-bottom:-100vh;z-index:1;
   overflow:hidden;pointer-events:none}
+/* The dot field behind the shell. Drawn rather than tiled, because the pointer
+   has to be able to push it out of the way — see components/DotField.tsx. */
+.dot-field{position:absolute;inset:0;z-index:0;width:100%;height:100%;
+  display:block;pointer-events:none}
+
 /* The acts stay out of the stacking order (no z-index of their own) so the 3D
    layer paints over their backgrounds and their sticky copy paints over it. */
 .ball-stage,.orbit-stage,.lever-stage{position:relative;margin:0}
@@ -58,7 +75,15 @@
 .story > footer,
 .story > div:not(.story-stage){position:relative;z-index:2}
 .ball-stage{height:var(--hero-h)}
-.orbit-stage{height:170vh}
+/* Act one's stage is pinned for its section minus a viewport, so the last 100vh
+   of #intro scrolls a stage that is already empty — the cloud and the headline
+   have both left by 0.955. Act two starts a viewport early so it begins pinning
+   exactly where act one releases, instead of after a screenful of nothing. The
+   two sticky stages overlap for that viewport; act one's is transparent by then.
+   This is the same seam `full` fixes between acts two and three, which act one
+   cannot use: its exit plays inside the pinned stage, so its schedule has to end
+   where the pin does. */
+.orbit-stage{height:230vh;margin-top:-100vh}
 /* Act two animates across its whole section, so its caption has to stay pinned
    across the whole section too. Taking no flow height (the trick the story stage
    uses) keeps it there instead of letting it slide away two thirds of the way
@@ -118,9 +143,10 @@
 /* the reference puts a coloured bloom behind its media card; same idea */
 .ball-bloom{position:absolute;left:50%;z-index:0;pointer-events:none;
   top:0;width:min(860px,92vw);height:44vh;
-  transform:translate3d(-50%,calc(68vh - 56vh * var(--frame)),0);
+  transform:translate3d(-50%,calc(68vh - 56vh * var(--frame)),0)
+    scale(calc(1 + .14 * var(--flare)));
   background:radial-gradient(closest-side,rgba(111,155,240,.42),rgba(58,79,174,.14) 58%,transparent);
-  filter:blur(14px);opacity:calc(.5 + .5 * var(--frame))}
+  filter:blur(14px);opacity:calc(.5 + .5 * var(--frame) + .4 * var(--flare))}
 
 /* --- hero copy ----------------------------------------------------------- */
 .ball-copy{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;
@@ -136,7 +162,13 @@
 .hero-note b{background:var(--grad);color:#fff;border-radius:999px;padding:4px 11px;
   font-size:12px;font-weight:700;letter-spacing:.02em}
 .ball-copy h1{margin:0;font-size:clamp(42px,5.8vw,92px);font-weight:800;letter-spacing:-.045em;line-height:.98;text-wrap:balance}
-.ball-copy h1 em{font-style:italic;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+/* background-clip:text paints only inside the element's own background box, and an
+   italic shears the bottom of a glyph to the LEFT of it — so a descender on the
+   first letter ("possibilities") was sliced off down a vertical line. The padding
+   widens the painted box; the matching negative margin keeps the layout identical. */
+.ball-copy h1 em{font-style:italic;background:var(--grad);-webkit-background-clip:text;
+  background-clip:text;color:transparent;
+  padding:0 .08em 0 .14em;margin:0 -.08em 0 -.14em}
 .ball-lede{margin:clamp(20px,3vh,32px) auto 0;max-width:560px;font-size:clamp(17px,1.5vw,21px);line-height:1.55;color:var(--muted);text-wrap:pretty;min-height:64px;transition:opacity .3s ease}
 .ball-dots{display:flex;gap:8px;margin-top:18px;justify-content:center}
 /* the reference's paired proof cards, in place of a button row */
@@ -157,11 +189,305 @@
    Both sit on a scrim at the foot of the frame: the top belongs to the docked
    nav, and the middle belongs to whatever the scene is doing. */
 .act-copy{position:absolute;left:0;right:0;bottom:0;z-index:2;text-align:center;
-  padding:44px clamp(20px,6vw,32px) calc(9vh + 26px);pointer-events:none;
+  padding:44px clamp(20px,6vw,32px) calc(3.5vh + 22px);pointer-events:none;
   background:linear-gradient(180deg,rgba(233,239,252,0) 0%,rgba(236,241,252,.88) 26%,rgba(242,245,251,.99) 62%)}
 .act-copy>*{pointer-events:auto}
-.orbit-copy{opacity:var(--orbit)}
-.lever-copy{opacity:var(--lever)}
+/* The service row made this block tall enough that its top edge now sits over
+   the middle of the shell, where the mark is nearly black — and .act-copy's
+   scrim is still transparent there, so the eyebrow was landing on the V and
+   disappearing. The fade is anchored to the top padding rather than to a
+   percentage of the block, so the eyebrow always starts below it however tall
+   the block gets. --scrim is the one knob. */
+.orbit-copy{--scrim:104px;opacity:var(--orbit);padding-top:var(--scrim);
+  background:linear-gradient(180deg,rgba(233,239,252,0) 0,
+    rgba(236,241,252,.86) calc(var(--scrim) * .58),
+    rgba(242,245,251,.99) calc(var(--scrim) * .93))}
+/* The one way out of the act to the industry pages. The cards cannot carry it:
+   the rail is pointer-events:none so a card the mask has faded to nothing is not
+   still a click target, and a "view" line on a card that cannot be clicked would
+   be a lie. */
+/* .act-copy>* turns pointer events back on for every child of every caption. In
+   act two that made the faded headline a click target sitting directly on top of
+   the deck: --orbit is the caption's own opacity (StoryScene publishes s2.copy
+   into it), so from the moment the caption fades the h2 was invisible and still
+   swallowing every click meant for a card. Nothing in this caption is interactive
+   except the link, so nothing else gets to be. */
+.orbit-copy>*{pointer-events:none}
+/* And the link itself only while the caption is actually up. Clipped rather than
+   scaled or hidden: clip-path takes an element out of hit-testing without moving
+   or resizing what is on screen. The ramp is placed so the clip is fully open for
+   the whole of the link's visible life and only closes once the caption is below
+   half opacity, on its way out. */
+.orbit-all{display:inline-block;margin-top:15px;pointer-events:auto;
+  clip-path:inset(calc(clamp(0,(.5 - var(--orbit,0)) * 4,1) * 50%));
+  font-size:13.5px;font-weight:600;letter-spacing:.005em;color:var(--accent-2);
+  text-decoration:underline;text-underline-offset:4px;
+  text-decoration-thickness:1px;
+  text-decoration-color:rgba(58,79,174,.32);transition:text-decoration-color .2s}
+.orbit-all:hover{text-decoration-color:currentColor}
+
+/* --- the eight industries, on a deck the scroll drives sideways ----------
+   The act holds the shell at its closest for the whole window the services need,
+   so there is no room beside it to lay four of them out — about 22% of the width
+   per side at 16:9, less on a squarer screen. The deck solves that by moving
+   instead: vertical scroll drives it across the frame, one card in the middle at
+   a time, its neighbours either side saying how many there are. The shell never
+   leaves, so the field stays continuous — which is what the row at the foot of
+   the caption could not do, because a block that tall whites out the lower two
+   thirds of the scene.
+
+   --deck (which card is in the middle, fractional) and --sys-1..4 (how much of
+   the frame each card has) both come off the same position-derived machine the
+   ball runs on, so the deck runs backwards when you scroll back up. The track
+   offset is worked out here rather than in the scene: the card width is a layout
+   question, and it changes with the viewport. */
+/* The foot of the frame — the band the caption has just left. The caption is
+   gone at 0.24 and the deck starts arriving at 0.23, so the promise dissolves
+   and the cards take its place rather than the two sharing the picture. Anchored
+   to the bottom rather than placed at a percentage: what has to stay constant is
+   the gap to the fold, and everything above belongs to the shell and the mark. */
+/* The rail is the window; the deck is what moves through it. They are separate
+   elements because the mask has to stay still while the track slides — a mask on
+   the track itself would travel with the cards and never reach the frame's edge.
+   Grid rather than block centring: an item wider than its container centres and
+   overflows both ways under `justify-items`, where auto margins would collapse
+   to the left. */
+.svc-rail{position:absolute;left:0;right:0;bottom:var(--deck-b,max(38px,5.5vh));z-index:2;
+  pointer-events:none;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 15%,#000 85%,transparent 100%);
+  mask-image:linear-gradient(90deg,transparent 0,#000 15%,#000 85%,transparent 100%);
+  /* Sized to the viewport rather than to the rail: on a phone the rail inherits
+     the sticky frame's 24px inset, and a mask that stopped there would fade the
+     cards out well inside the edge instead of at it. `no-repeat` because the deck
+     is wider than either box and the default would tile a second gradient over
+     the overflow. */
+  -webkit-mask-size:100vw 100%;mask-size:100vw 100%;
+  -webkit-mask-position:center;mask-position:center;
+  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
+.svc-deck{position:relative;left:50%;
+  --w:clamp(300px,27vw,412px); --gap:24px;
+  display:flex;width:max-content;gap:var(--gap);list-style:none;margin:0;padding:0;
+  align-items:stretch;opacity:var(--deck-in);
+  /* The deck slides a long way and every card behind it is compositing a blur and
+     a backdrop; promoting the track once is cheaper than the browser working it
+     out per frame. */
+  will-change:transform;
+  /* One property, not two: -50% takes the deck's own middle to the middle of the
+     frame, which is card 3.5 of eight, and the rest centres card --deck on
+     top of that. Auto margins and `justify-items` both give up and clamp to the
+     start edge once the deck is wider than the rail, which is always. */
+  transform:translate3d(
+    calc(-50% + (3.5 - var(--deck)) * (var(--w) + var(--gap))),0,0)}
+/* Built out of a hairline and one accent mark rather than a drop shadow. Eight
+   cards need a lighter object than four did: a heavy card repeated eight times
+   across the frame reads as a wall, and the deck has to look like something you
+   scan rather than something you work through.
+
+   Everything that says "this is the one you are reading" is driven by --a, the
+   card's own share of the frame, so the card assembles as it arrives and takes
+   itself apart as it leaves — the same grammar as every other object in the
+   story, and reversible for the same reason.
+
+   --off is the other half of that, and it is the one the deck was missing. --a is
+   unsigned: it falls off identically either side of the middle, so a card two
+   places to the left was drawn exactly like a card two places to the right and
+   the row read as a flat strip sliding past. --off is the signed distance from
+   the middle, in cards, and it is free — --i is on the element and --deck is on
+   .story, so the card can work it out itself without a new channel.
+
+   Clamped, because the far cards are already under the rail's mask and a card
+   eight places out would otherwise be edge-on. */
+.svc{--off:calc(var(--i) - var(--deck));
+  --tilt:clamp(-1.55,var(--off),1.55);
+  /* The card's own colour, off its own index. Eight hand-picked colours would be
+     eight decisions with nothing holding them together; a hue that walks with the
+     index makes the colour a property of the DECK — it sweeps across the row, so
+     it reads as one considered range rather than as a box of crayons, and the
+     order of the cards is legible from the colour alone.
+
+     The range is deliberately narrow — 208deg to 232deg across the eight, under
+     25deg of travel. A first cut ran to 264deg and the last cards came out purple,
+     which is not a colour this site owns. This span is bracketed by the brand's
+     own: 219deg is --sky's #6f9bf0 and 229deg is --accent-2's #3a4fae, so every
+     card lands within a few degrees of a blue already on the page. The sweep is
+     meant to be felt across the row rather than noticed on any one card. */
+  --h:calc(208deg + var(--i) * 3.4deg);
+  flex:0 0 auto;width:var(--w);box-sizing:border-box;
+  display:flex;flex-direction:column;
+  padding:31px 31px 25px;text-align:left;border-radius:20px;
+  /* Glass rather than paint. The cards cross the lower third of the shell, and a
+     solid card there punches a hole in the one object the whole story is about.
+     Letting the bubble's glow come through the top of them is the difference
+     between a row of cards over a scene and a row of cards in one. The centred
+     card takes on enough white to hold its text; its neighbours stay glassier,
+     which does some of the work of saying which one is being read. */
+  /* Two layers: the card's hue washing down from the top-left corner, over the
+     white that makes it legible. The wash strengthens with --a like everything
+     else, so the centred card is the one with real colour in it and the deck does
+     not read as eight equally loud objects. Kept pale — the ink on top is
+     #1a1740, and a tint dark enough to notice is a tint dark enough to fight it. */
+  background:
+    linear-gradient(152deg,
+      hsl(var(--h) 88% 76% / calc(.17 + .21 * var(--a))) 0%,
+      hsl(var(--h) 82% 80% / calc(.06 + .09 * var(--a))) 42%,
+      hsl(calc(var(--h) + 9deg) 80% 84% / 0) 76%),
+    rgba(255,255,255,calc(.58 + .34 * var(--a)));
+  -webkit-backdrop-filter:blur(16px) saturate(1.3);
+  backdrop-filter:blur(16px) saturate(1.3);
+  border:1px solid hsl(var(--h) 70% 88% / calc(.55 + .4 * var(--a)));
+  /* The lift takes the card's hue too, so a card's shadow belongs to it rather
+     than to a single neutral applied eight times. */
+  box-shadow:0 1px 2px rgba(26,23,64,.05),
+             0 18px 44px hsl(var(--h) 58% 42% / calc(.05 + .16 * var(--a)));
+  /* The depth. rotateY off --off turns each card towards the middle of the frame,
+     so the row reads as a shallow arc you are looking along rather than a strip
+     you are looking at; the Z and Y terms drop the off-centre cards back and let
+     them sag, which is what stops the arc reading as a fan of flat rectangles.
+     perspective() per card rather than on the deck: the deck is several times
+     wider than the frame, so a perspective on it would put the vanishing point
+     far off screen and the tilt would come out as a shear. */
+  transform:perspective(1200px)
+            rotateY(calc(var(--tilt) * -14deg))
+            translate3d(0,calc(14px * (1 - var(--a))),calc(-46px * (1 - var(--a))));
+  transform-origin:50% 60%;
+  /* Gentler than the four-card deck's fall-off was. Five cards are on screen here
+     against three before, so the far ones are doing atmosphere rather than
+     carrying text — and a hard blur on five objects at once reads as smeared
+     rather than as depth. */
+  opacity:calc(.2 + .8 * var(--a));
+  filter:blur(calc(2.2px * (1 - var(--a))));
+  scale:calc(.92 + .08 * var(--a))}
+/* The bloom behind the card that is being read. It is the only warm light on the
+   deck and only the centred card gets it, so it marks the middle of the frame
+   without another line or border to do it. Behind the content, inside the radius. */
+.svc::before{content:'';position:absolute;inset:0;border-radius:inherit;z-index:0;
+  pointer-events:none;opacity:var(--a);
+  background:radial-gradient(120% 78% at 84% -8%,
+    hsl(calc(var(--h) + 7deg) 92% 70% / .34) 0%,
+    hsl(calc(var(--h) + 7deg) 88% 74% / .11) 38%,transparent 68%)}
+.svc{position:relative}
+.svc > *{position:relative;z-index:1}
+/* "001 / Industry" — a bare number reads as a price or a date; the word after
+   the slash is what makes it a label. */
+.svc-num{display:block;font-family:ui-monospace,Menlo,monospace;font-size:10px;
+  letter-spacing:.14em;color:hsl(var(--h) 62% 46%);
+  opacity:calc(.55 + .45 * var(--a));margin-bottom:15px}
+.svc-name{display:block;font-size:29px;font-weight:650;letter-spacing:-.03em;
+  color:var(--ink);line-height:1.14;text-wrap:balance}
+/* The one moving part left on the card, and the cheapest possible one: a rule
+   that draws itself across as the card comes to the middle. It is the deck's
+   own position doing it — no timer, nothing to get out of step — and it gives
+   the centred card a mark none of its neighbours have. */
+.svc-rule{display:block;height:2px;margin:18px 0 0;border-radius:2px;
+  width:calc(28px + 54% * var(--a));
+  /* The card's own hue, running into the next card's, so the rule is a two-card
+     slice of the same sweep the row is built on. */
+  background:linear-gradient(90deg,
+    hsl(var(--h) 66% 52%),hsl(calc(var(--h) + 8deg) 76% 64%));
+  opacity:calc(.32 + .68 * var(--a))}
+/* The promise, in the trade's own words rather than ours. */
+.svc-kills{display:block;margin-top:17px;font-size:16px;line-height:1.5;
+  color:var(--ink-2);opacity:calc(.6 + .4 * var(--a));text-wrap:pretty}
+/* Pinned to the foot, which is what it is for: the eight names are different
+   lengths, so without something holding the bottom the cards were a row of
+   boxes with unequal puddles of empty space under the text. It also gives the
+   card a second register — the promise is what the reader gets, this is the
+   measure they already track — and it is the industry's own first `win` rather
+   than a line written here, so it cannot disagree with that industry's page.
+   A count of workflows sat here first and was dropped: all eight industries
+   carry six, so five cards on screen all said the same thing. */
+.svc-meta{display:flex;align-items:center;gap:11px;margin-top:auto;padding-top:25px;
+  font-family:ui-monospace,Menlo,monospace;font-size:10.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--muted);
+  opacity:calc(.45 + .55 * var(--a))}
+.svc-meta::before{content:'';flex:1;height:1px;order:2;
+  background:hsl(var(--h) 40% 60% / .3)}
+/* Now that the card is a link, it can say so. It sits on the meta row rather than
+   on a line of its own: two rows at the foot is clutter, and the measure and the
+   way in are the same register — small, monospaced, under the rule. */
+.svc-go{order:3;flex:0 0 auto;font-weight:600;font-style:normal;
+  color:hsl(var(--h) 62% 46%);opacity:calc(.35 + .65 * var(--a))}
+
+/* The hit area. The whole card is the target, but only while the card is actually
+   readable: the rail's mask fades the outer cards to nothing, and an invisible
+   click target at the edge of the frame is the kind of thing that navigates
+   someone somewhere they never chose to go. --a is exactly the number that says
+   how much of the frame this card has, so the target is scaled by it — a card the
+   mask has taken to nothing is left with a two-percent target at its own centre,
+   which no one is going to hit by accident. pointer-events is re-enabled here and
+   only here; .svc-rail turns it off for everything else. */
+.svc-hit{position:absolute;inset:0;z-index:2;border-radius:inherit;
+  pointer-events:auto;scale:calc(.02 + .98 * var(--a))}
+.svc-hit:focus-visible{outline:2px solid var(--accent-2);outline-offset:3px}
+/* Hover belongs to the centred card in practice — it is the only one under the
+   pointer with a target worth hitting — so this reads as the card you are about
+   to open lifting, rather than as eight cards twitching. */
+.svc:has(.svc-hit:hover) .svc-go,.svc:has(.svc-hit:focus-visible) .svc-go{opacity:1}
+.svc:has(.svc-hit:hover){transition:box-shadow .25s}
+.svc:has(.svc-hit:hover){box-shadow:0 1px 2px rgba(26,23,64,.05),
+  0 24px 54px hsl(var(--h) 58% 42% / calc(.1 + .2 * var(--a)))}
+
+
+@media (max-width:900px){
+  /* One card fills the phone, so the neighbours are only a sliver — enough to
+     say the deck goes on, not enough to read. */
+  .svc-rail{--deck-b:max(40px,6vh);
+    -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 11%,#000 89%,transparent 100%);
+    mask-image:linear-gradient(90deg,transparent 0,#000 11%,#000 89%,transparent 100%)}
+  .svc-deck{--w:min(80vw,352px);--gap:16px}
+  .svc{padding:25px 23px 20px;border-radius:18px;
+    -webkit-backdrop-filter:none;backdrop-filter:none;
+    background:rgba(255,255,255,calc(.72 + .28 * var(--a)));
+    transform:perspective(900px) rotateY(calc(var(--tilt) * -11deg))
+              translate3d(0,calc(10px * (1 - var(--a))),calc(-30px * (1 - var(--a))))}
+  .svc-num{margin-bottom:13px}
+  .svc-name{font-size:23px}
+  .svc-rule{margin-top:15px}
+  .svc-kills{margin-top:14px;font-size:14.5px}
+  .svc-meta{padding-top:20px;gap:9px;font-size:10px}
+}
+@media (prefers-reduced-motion:reduce){
+  /* Nothing drives --deck here — the rAF loop does not run — so the deck would
+     sit off to one side with one card faintly visible. Lay it out as a plain
+     grid instead, all eight up and still, the same as the voices in act one.
+     --deck is parked on the deck's own middle as well as the transform being
+     dropped, so the offset is nothing either way. */
+  .svc-rail{position:relative;bottom:auto;-webkit-mask-image:none;mask-image:none}
+  .svc-deck{position:static;left:auto;width:auto;transform:none;--deck:3.5;
+    display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    max-width:1180px;margin:0 auto;padding:0 24px;opacity:1}
+  .svc{width:auto;opacity:1;filter:none;scale:none;background:#fff;
+    transform:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+  .svc::before{display:none}
+  /* --a stays 0 here, so every card would sit at its faintest: no shadow, a rule
+     drawn to 22px, a washed-out number. Park it at full instead — a still grid
+     has no "the one being read", so every card is.
+     `!important` because each card carries --a as an inline style, and an inline
+     custom property beats a stylesheet one. */
+  .svc{--a:1 !important}
+}
+/* Act 03 takes the top band instead of the foot. Its machine is the widest thing
+   in the story and fills the frame from the beam down, so a caption underneath
+   had tiles landing on the words; the camera aims above the rig to hand this band
+   over (lookY in StoryScene). The scrim is flipped to match, and each line has
+   its own arrival — eyebrow, headline, then the line under it — off --lever-1..3.
+   The rest of the reveal grammar is the problem ring's: up out of a blur. */
+.lever-copy{top:0;bottom:auto;background:none;
+  padding:clamp(86px,11.5vh,128px) clamp(20px,6vw,32px) 40px}
+/* The scrim is act three's, so it arrives when act three does. Act two's sticky
+   is pulled a full viewport into act three's (#orbit .act-sticky), so a scrim
+   painted at all times covers the foot of act two from wherever act three's
+   sticky happens to be — which is what was erasing the service row. It rides on
+   a pseudo-element rather than on .lever-copy itself so the three lines keep
+   their own arrivals instead of being multiplied by this one. */
+.lever-copy::before{content:'';position:absolute;inset:0;z-index:-1;opacity:var(--lever-1);
+  background:linear-gradient(0deg,rgba(233,239,252,0) 0%,rgba(236,241,252,.88) 28%,rgba(242,245,251,.99) 64%)}
+.lever-copy>*{--in:calc(1 - var(--r));opacity:var(--r);
+  filter:blur(calc(7px * var(--in)));
+  transform:translate3d(0,calc(16px * var(--in)),0)}
+.lever-copy .act-num{--r:var(--lever-1)}
+.lever-copy h2{--r:var(--lever-2)}
+.lever-copy p{--r:var(--lever-3)}
 .act-num{display:block;font-family:ui-monospace,Menlo,monospace;font-size:12px;
   letter-spacing:.18em;color:var(--accent-2);margin-bottom:14px}
 .act-copy h2{margin:0;font-size:clamp(28px,3.4vw,50px);font-weight:600;letter-spacing:-.03em;
@@ -169,27 +495,15 @@
 .act-copy h2 em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 .act-copy p{margin:16px auto 0;max-width:560px;font-size:17px;line-height:1.6;color:var(--muted);text-wrap:pretty}
 
-/* --- the side-by-side that the dive resolves into ------------------------ */
-.ball-leverage{position:absolute;z-index:2;left:clamp(20px,5vw,86px);top:50%;translate:0 -50%;
-  max-width:min(480px,42vw);text-align:left;
-  opacity:var(--leverage);
-  transform:translateX(calc(-30px * (1 - var(--leverage))));
-  pointer-events:none}
-.ball-leverage h2{margin:0;font-size:clamp(32px,3.6vw,54px);font-weight:500;letter-spacing:-1.6px;line-height:1.05}
-.ball-leverage h2 em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-.ball-leverage p{margin:20px 0 0;font-size:17px;line-height:1.65;color:var(--muted);text-wrap:pretty}
-.ball-note{font-size:15px !important;margin-top:22px !important;max-width:400px}
-.ball-steps{list-style:none;margin:28px 0 0;padding:0;display:flex;flex-direction:column;gap:12px}
-.ball-steps li{display:flex;align-items:center;gap:12px;font-size:15px;color:var(--ink)}
-.ball-steps b{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:#fff;background:var(--ink-2);
-  border-radius:6px;padding:5px 8px;letter-spacing:.04em}
-
-
 @media (max-width:900px){
-  .story{--hero-h:300vh;--story-h:calc(var(--hero-h) + 490vh)}
-  .orbit-stage{height:150vh}
+  .story{--hero-h:420vh;--story-h:calc(var(--hero-h) + 390vh)}
+  .orbit-stage{height:200vh}
   .lever-stage{height:340vh}
-  .act-copy{padding:34px clamp(20px,6vw,32px) calc(12vh + 22px)}
+  .act-copy{padding:34px clamp(20px,6vw,32px) calc(4vh + 20px)}
+  /* Re-stated after the shorthand above, which would otherwise take the top
+     padding back to 34px and leave the eyebrow inside the fade. */
+  .orbit-copy{--scrim:96px;padding-top:var(--scrim)}
+  .lever-copy{padding:calc(8vh + 66px) clamp(20px,6vw,32px) 30px}
   .act-copy p{font-size:15px}
   /* One row at phone width: the strip must not wrap onto the announcement
      pill, so the CTA loses its padding and its longer label. */
@@ -215,12 +529,22 @@
 }
 @media (prefers-reduced-motion:reduce){
   .ball-stage,.orbit-stage,.lever-stage{height:auto}
+  /* The overlaps that close the seams between the pinned acts have nothing to
+     close here — nothing is pinned — so they just stack the three acts on top of
+     one another. Undo both halves of the pull. */
+  .orbit-stage{margin-top:0}
+  #orbit .act-sticky{margin-bottom:0}
   /* No pinned run to rise through, so the glow has nothing to cross. */
   .story{--hero-h:60vh}
   .story-stage{position:relative;height:52vh;margin-bottom:0;overflow:visible}
   .act-sticky{position:relative;height:auto;padding:8vh 0 4vh}
   .act-copy{position:relative;background:none;padding:0 24px}
   .orbit-copy,.lever-copy{opacity:1}
+  .lever-copy{--lever-1:1;--lever-2:1;--lever-3:1;padding:0 24px}
+  /* The scrim is gated on --lever-1, which is pinned to 1 here, so it painted as
+     a grey slab behind the caption in a layout that has no scene under it. */
+  .lever-copy::before{display:none}
+  .lever-copy>*{filter:none;transform:none}
   .ball-sticky{position:relative;height:auto;padding-bottom:52vh}
   .ball-canvas{height:52vh}
   .ball-copy,.ball-leverage{opacity:1;transform:none}
@@ -231,53 +555,128 @@
   .ball-bloom{display:none}
   .ball-leverage{position:relative;top:auto;translate:none;margin:0 auto;padding:0 24px}
 }
+/* --- the problem, as a dozen voices around the ball ---------------------
+   Twelve short things a small team says out loud, each in a chat bubble, drifting
+   in a ring clear of the shell in the middle and of the headline along the top.
+   Every bubble reads one arrival value (--p1..--p12) and one exit value
+   (--e1..--e12) that StoryScene sets from the same position-derived machine the
+   ball itself runs on, so the cloud fills and empties with the scroll and nothing
+   structural is on a timer. The drift underneath is the exception, and it is
+   ambient: it says nothing and carries no state. */
+.ball-problems{position:absolute;inset:0;z-index:2;pointer-events:none}
 
-/* --- the problem, as a picture ------------------------------------------
-   A morning's inbox stacking up. Row N arrives once --leverage has passed it,
-   so the pile grows with the scroll and drains again on the way back up. No
-   transitions anywhere: the scroll is the timeline. */
-.inbox{margin:24px 0 0;max-width:412px}
-.inbox-cap,.inbox-meter{font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.16em;
-  text-transform:uppercase;color:var(--muted)}
-.inbox-cap{margin:0 0 10px}
-.inbox-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
-/* Each row is worth a sixth of the run, and it slides the last few pixels into
-   place rather than simply appearing. */
-.inbox-row{display:grid;grid-template-columns:8px auto 1fr auto;align-items:center;gap:10px;
-  padding:11px 14px;border-radius:10px;background:rgba(251,252,255,.72);
-  border:1px solid rgba(255,255,255,.8);box-shadow:0 4px 12px rgba(26,23,64,.05);
-  opacity:clamp(0,calc(var(--leverage) * 7 - var(--r)),1);
-  translate:0 calc(10px * (1 - clamp(0,calc(var(--leverage) * 7 - var(--r)),1)))}
-.inbox-dot{width:8px;height:8px;border-radius:50%;background:var(--accent-2)}
-.inbox-kind{font-size:12.5px;font-weight:600;color:var(--ink)}
-.inbox-line{font-size:12.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.inbox-age{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--muted)}
-/* Older mail reads colder. Days-old is the one that costs money, so it is the
-   only one that gets a warm colour. */
-.inbox-row[data-cold='1'] .inbox-dot{background:#c9a227}
-.inbox-row[data-cold='2'] .inbox-dot{background:#c2683c}
-.inbox-row[data-cold='2'] .inbox-age{color:#c2683c}
-.inbox-meter{display:flex;align-items:center;gap:12px;margin:16px 0 0}
-.inbox-bar{flex:1;height:5px;border-radius:999px;background:#c3d0ea;overflow:hidden}
-/* Fills the wrong way on purpose: the longer the pile, the longer the wait. */
-.inbox-bar i{display:block;height:100%;border-radius:999px;
-  width:calc(var(--leverage) * 100%);
-  background:linear-gradient(90deg,#3a4fae,#c9a227 62%,#c2683c)}
+/* Sits high and stays out of the shell's way: the ball holds the centre of the
+   frame, so the headline takes the band above it rather than asking it to move.
+   It lifts away last, once the voices it introduces have been taken in. */
+.pv-head{position:absolute;left:0;right:0;top:clamp(76px,10vh,116px);text-align:center;
+  padding:0 24px;opacity:calc(var(--leverage) * (1 - var(--exit-head)));
+  filter:blur(calc(5px * var(--exit-head)));
+  transform:translate3d(0,calc(-40px * var(--exit-head)),0)}
+.pv-num{display:block;font-family:ui-monospace,Menlo,monospace;font-size:11px;
+  letter-spacing:.18em;color:var(--accent-2);margin-bottom:10px}
+.pv-head h2{margin:0;font-size:clamp(26px,2.6vw,38px);font-weight:600;letter-spacing:-.03em;
+  line-height:1.08;text-wrap:balance}
+.pv-head h2 em{font-style:normal;background:var(--grad);-webkit-background-clip:text;
+  background-clip:text;color:transparent}
+
+.pv-list{position:absolute;inset:0;list-style:none;margin:0;padding:0}
+
+/* Anchored by the edge nearest the screen, never by its middle: a centred bubble
+   hangs off the side as soon as its sentence is long, and these are sentences of
+   very different lengths. --ex is its own way back to the middle of the frame,
+   where the ball is, worked out from that anchor — so nothing here needs to know
+   the layout, at any width. */
+.pv-bubble{position:absolute;top:calc(var(--yn) * 1%);
+  max-width:min(300px,25vw);
+  --in:calc(1 - var(--p));
+  --ey:calc((50 - var(--yn)) * 1vh);
+  /* Arrives out of the depth and leaves by being taken into the shell — gone
+     before it reaches it, so it reads as absorbed rather than as passing over. */
+  opacity:calc(var(--p) * max(0, 1 - var(--e) * 1.5));
+  filter:blur(calc(6px * var(--in) + 14px * var(--e)));
+  transform:translate3d(
+      calc(var(--ex) * var(--e)),
+      calc(-50% + 14px * var(--in) + var(--ey) * var(--e)),
+      0)
+    scale(calc(.9 + .1 * var(--p) - .58 * var(--e)))}
+.pv-bubble[data-side='l']{left:calc(var(--xn) * 1%);
+  --ex:calc((50 - var(--xn)) * 1vw - 50%)}
+.pv-bubble[data-side='r']{right:calc((100 - var(--xn)) * 1%);
+  --ex:calc((50 - var(--xn)) * 1vw + 50%)}
+
+/* The drift, on two elements rather than one. A single loop on a dozen bubbles
+   reads as one object breathing however you vary the period; two loops of
+   different lengths — the float here, the sway below — compound into a path that
+   takes minutes to come back round. Both run on their own properties (translate,
+   rotate), so neither touches the `transform` the scroll is writing above. The
+   negative delays are the point: every bubble starts part-way through its own
+   cycle, so nothing ever begins together. */
+.pv-float{display:block;animation:pv-float var(--dur) ease-in-out infinite;
+  animation-delay:var(--t)}
+@keyframes pv-float{
+  0%,100%{translate:0 0}
+  25%{translate:calc(var(--fx) * 1px) calc(var(--fy) * -1px)}
+  50%{translate:calc(var(--fx) * -.55px) calc(var(--fy) * -1.8px)}
+  75%{translate:calc(var(--fx) * -1px) calc(var(--fy) * -.5px)}
+}
+
+/* Glass, but not so glassy the sentence stops being the point: these sit over a
+   lit shell on a blue field, and the thing a reader has to be able to do here is
+   read. Opaque enough for the type to hold, with the weight to match. */
+.pv-say{display:block;box-sizing:border-box;
+  padding:11px 16px 12px;border-radius:16px;
+  background:rgba(255,255,255,.95);
+  -webkit-backdrop-filter:blur(8px) saturate(1.2);backdrop-filter:blur(8px) saturate(1.2);
+  border:1px solid rgba(214,224,244,.9);
+  box-shadow:0 16px 34px rgba(26,23,64,.13),0 2px 6px rgba(26,23,64,.06);
+  font-size:15px;font-weight:500;line-height:1.4;letter-spacing:-.012em;
+  color:var(--ink);text-wrap:pretty;
+  animation:pv-sway var(--dur2) ease-in-out infinite;animation-delay:var(--t2)}
+@keyframes pv-sway{
+  0%,100%{rotate:calc(var(--rot) * 1deg)}
+  50%{rotate:calc(var(--rot) * -1deg)}
+}
+/* The tail: what makes it something said rather than something written down. */
+.pv-say::after{content:'';position:absolute;bottom:-5px;width:11px;height:11px;
+  background:rgba(255,255,255,.95);border-bottom-right-radius:3px;
+  border-right:1px solid rgba(214,224,244,.9);border-bottom:1px solid rgba(214,224,244,.9);
+  box-shadow:3px 3px 7px rgba(26,23,64,.06);transform:rotate(45deg)}
+.pv-bubble{position:absolute}
+.pv-float{position:relative}
+.pv-bubble[data-side='l'] .pv-say::after{left:19px}
+.pv-bubble[data-side='r'] .pv-say::after{right:19px}
+
 @media (max-width:900px){
-  /* Six rows plus a headline is taller than the phone's share of the stage, so
-     the panel gives back the breathing room it was holding under it. */
-  .ball-leverage{padding-bottom:calc(3vh + 14px)}
-  .inbox{margin-top:14px;max-width:none}
-  .inbox-list{gap:5px}
-  .inbox-row{padding:8px 12px;gap:8px}
-  .inbox-meter{margin-top:12px}
-  /* Four rows, not six: a phone's share of the stage is not tall enough for
-     both the pile and the headline, and the headline loses to the top bar.
-     The two dropped are from the middle, so 4m -> 2h -> 2d -> 3d still tells it. */
-  .inbox-row:nth-child(3),.inbox-row:nth-child(4){display:none}
-  /* The one-line preview is the first thing to go when there is no room. */
-  .inbox-line{display:none}
-  .inbox-row{grid-template-columns:8px auto 1fr}
-  .inbox-age{justify-self:end}
-  .ball-note{font-size:14px !important;margin-top:16px !important}
+  /* No room to ring a phone-width ball, so the voices drop below it as a thread
+     and the ball lifts (that is what `aside` buys) to clear them. A dozen of them
+     does not fit a phone, so it keeps the first six: the cloud is the point on a
+     desktop, the sentences are the point here. */
+  .ball-problems{inset:auto 0 0 0;padding:26px clamp(14px,4vw,18px) calc(4vh + 10px);
+    background:linear-gradient(180deg,rgba(233,239,252,0) 0%,rgba(230,237,252,.88) 14%,rgba(226,234,251,.98) 38%)}
+  .pv-head{position:static;text-align:left;padding:0 0 14px}
+  .pv-head h2{font-size:clamp(21px,5.6vw,28px)}
+  .pv-num{margin-bottom:7px;font-size:10px}
+  .pv-list{position:static;display:flex;flex-direction:column;gap:9px}
+  /* The drift is a desktop idea: it needs room around each bubble, and a phone
+     thread has none — eight pixels of gap against a thirty pixel float is bubbles
+     landing on each other. Here they sit still and are read. */
+  .pv-float,.pv-say{animation:none;translate:none;rotate:none}
+  .pv-bubble[data-side]{position:relative;left:auto;right:auto;top:auto;max-width:86%;
+    /* The shell is above the thread here rather than in the middle of it. */
+    --ex:0px;--ey:-70px;
+    transform:translate3d(0,calc(12px * var(--in) + var(--ey) * var(--e)),0)
+      scale(calc(.94 + .06 * var(--p) - .5 * var(--e)))}
+  .pv-say{font-size:14px;padding:10px 14px 11px;border-radius:14px}
+  .pv-bubble[data-side='r']{align-self:flex-end}
+  .pv-bubble:nth-child(n+7){display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  /* Nothing drives --p here, so the cloud would sit empty and say the opposite of
+     what it is for. Show it filled, and stop the drift — it is decoration. */
+  .ball-problems{position:relative;inset:auto;padding:4vh 24px 0;--exit-head:0;--flare:0}
+  .pv-head{position:static;opacity:1;transform:none;filter:none}
+  .pv-list{position:static;display:flex;flex-wrap:wrap;gap:9px;justify-content:center}
+  .pv-bubble[data-side]{position:relative;left:auto;right:auto;top:auto;
+    opacity:1;transform:none;filter:none;--p:1;--e:0}
+  .pv-float,.pv-say{animation:none;translate:none;rotate:none}
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Playfair_Display } from 'next/font/google'
 import Reveal from '@/components/Reveal'
+import KeepScroll from '@/components/KeepScroll'
 import './globals.css'
 
 // Only the article headline uses this, so only the one weight is fetched. The rest
@@ -25,6 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={display.variable}>
       <body>
         <Reveal />
+        <KeepScroll />
         {children}
       </body>
     </html>
