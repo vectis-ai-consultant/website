@@ -151,28 +151,33 @@ export default function HomePage() {
           {/* The case for the story, in numbers we did not make up. ADR-0001 rules
               out unverified outcome metrics and invented client results, so every
               figure here is published research with its source one click away, and
-              the band says so in its own footer. See docs/adr/0007. */}
+              the band says so in its own footer. See docs/adr/0007.
+
+              The band argues for the diagnosis rather than for AI: the waste is a
+              measured quantity and so is the failure rate, which makes choosing
+              what to build a measurement problem before it is an engineering one. */}
           <section id="evidence" className="ev" data-reveal="1">
             <div className="ev-inner">
-              <span className="ev-eyebrow">Published research</span>
-              <h2>Using AI is easy.<br /><em>Getting a measurable result is not.</em></h2>
+              <span className="ev-eyebrow">Why the diagnosis comes first</span>
+              <h2>The waste is measurable.<br /><em>So is the failure rate.</em></h2>
+              <p className="ev-lede">Most of the waste sits inside existing roles, not in whole jobs. And most programmes that set out to fix it still miss their objectives. That is a diagnostic problem — so we measure before we build.</p>
               <div className="ev-grid">
                 <article className="ev-cell">
-                  <span className="ev-idx">001 / Measured</span>
+                  <span className="ev-idx">001 / Measured result</span>
                   <strong className="ev-fig">40%</strong>
                   <span className="ev-rule" />
                   <p className="ev-claim">of workers spend at least a quarter of the week on manual, repetitive tasks — email, data collection, data entry.</p>
                   <a className="ev-src" href="https://www.smartsheet.com/content-center/product-news/automation/workers-waste-quarter-work-week-manual-repetitive-tasks" target="_blank" rel="noopener noreferrer">Source: Smartsheet<i>↗</i></a>
                 </article>
                 <article className="ev-cell">
-                  <span className="ev-idx">002 / Measured</span>
+                  <span className="ev-idx">002 / Measured result</span>
                   <strong className="ev-fig">60%</strong>
                   <span className="ev-rule" />
                   <p className="ev-claim">of US jobs have 30% or more of their activities already automatable — the tasks inside the role, not the role itself.</p>
                   <a className="ev-src" href="https://www.mckinsey.com/mgi/media-center/how-many-of-your-daily-tasks-could-be-automated" target="_blank" rel="noopener noreferrer">Source: McKinsey Global Institute<i>↗</i></a>
                 </article>
                 <article className="ev-cell">
-                  <span className="ev-idx">003 / Measured</span>
+                  <span className="ev-idx">003 / Measured result</span>
                   <strong className="ev-fig">70%</strong>
                   <span className="ev-rule" />
                   <p className="ev-claim">of transformation programmes miss their objectives. The root causes are consistent, and they are rarely the technology.</p>

@@ -114,3 +114,30 @@ The two figures this displaces — HBR on lead response time, and MIT Project NA
 generative-AI pilots returning nothing measurable — were not withdrawn for being
 wrong. They are still sound, and 95% in particular stood directly under this section's
 own headline. Recorded here in case the band is ever widened past three.
+
+---
+
+## Amendment — the band argues for the diagnosis, not for AI (2026-09-16)
+
+The client rewrote the band's framing. The headline *"Using AI is easy. Getting a
+measurable result is not."* is superseded by:
+
+> **Why the diagnosis comes first**
+> The waste is measurable. *So is the failure rate.*
+> Most of the waste sits inside existing roles, not in whole jobs. And most programmes
+> that set out to fix it still miss their objectives. That is a diagnostic problem — so
+> we measure before we build.
+
+The old headline put the burden on AI being hard. The new one puts it on knowing what
+to fix: 001 and 002 are the waste and where it actually sits, 003 is what happens to
+programmes that skip the measuring. Read together the three figures no longer say
+"this is difficult, hire someone" — they say the choice of what to build is a
+measurement problem before it is an engineering one, which is what the discovery call
+that follows is actually selling.
+
+The cell label moves from `Measured` to `Measured result` at the client's request, so
+each figure reads as a result someone measured rather than as a bare statistic. **The
+three rules are unchanged in substance**: every figure links to its source, every cell
+carries a `Measured` label, and the footer still says in words that this is published
+research and not client results. The figures and sources in the previous amendment are
+untouched.

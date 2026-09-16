@@ -371,6 +371,35 @@ export function initHome(): () => void {
   }, { rootMargin: '-45% 0px -45% 0px' });
   ['#services', '#contact'].forEach((sel) => { const el = $(sel); if (el) spy.observe(el); });
 
+  // ------------------------------------- the research cells follow the pointer
+  // Borrowed from the band this section was modelled on: the panel under the
+  // cursor lifts a soft wash of the accent, so the grid reads as three surfaces
+  // rather than three text blocks. Pointer-driven, not scroll-driven, so it sits
+  // outside ADR-0004 entirely — nothing structural depends on it.
+  const evGrid = $('#evidence .ev-grid');
+  if (evGrid && !reduceMotion) {
+    let raf = 0, pending = null, lit = null;
+    const paint = () => {
+      raf = 0;
+      if (lit && lit !== pending.cell) lit.style.setProperty('--glow', '0');
+      lit = pending.cell;
+      lit.style.setProperty('--gx', pending.x + 'px');
+      lit.style.setProperty('--gy', pending.y + 'px');
+      lit.style.setProperty('--glow', '1');
+    };
+    evGrid.addEventListener('pointermove', (e) => {
+      if (e.pointerType === 'touch') return;
+      const cell = e.target.closest ? e.target.closest('.ev-cell') : null;
+      if (!cell) return;
+      const b = cell.getBoundingClientRect();
+      pending = { cell: cell, x: Math.round(e.clientX - b.left), y: Math.round(e.clientY - b.top) };
+      if (!raf) raf = requestAnimationFrame(paint);
+    });
+    evGrid.addEventListener('pointerleave', () => {
+      if (lit) { lit.style.setProperty('--glow', '0'); lit = null; }
+    });
+  }
+
   /* eslint-enable */
 
   return () => {
