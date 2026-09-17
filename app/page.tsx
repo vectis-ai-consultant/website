@@ -180,10 +180,10 @@ export default function HomePage() {
                 </article>
                 <article className="ev-cell">
                   <span className="ev-idx">003 / Measured result</span>
-                  <strong className="ev-fig">7<span className="ev-unit">in 10</span></strong>
+                  <strong className="ev-fig">3<span className="ev-unit">in 10</span></strong>
                   <span className="ev-rule" />
-                  <p className="ev-claim">business transformations fail to deliver what they promised. The reasons repeat, and they are almost never the technology.</p>
-                  <p className="ev-basis">Roughly 70% of business transformations. The rate has held for decades.</p>
+                  <p className="ev-claim">business transformations hit the goals they set. What separates them is almost never the technology.</p>
+                  <p className="ev-basis">McKinsey measured roughly 70% falling short. The rate has held for decades.</p>
                   <a className="ev-src" href="https://www.mckinsey.com/capabilities/people-and-organization/our-insights/why-do-most-transformations-fail-a-conversation-with-harry-robinson" target="_blank" rel="noopener noreferrer">Source: McKinsey &amp; Company<i>↗</i></a>
                 </article>
               </div>

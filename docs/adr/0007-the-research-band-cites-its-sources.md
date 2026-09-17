@@ -169,3 +169,45 @@ they publish, are exactly those in the previous amendment.
 
 This does not loosen ADR-0001. These are still published research about work in
 general, not Vectis outcomes, and the footer still says so.
+
+---
+
+## Amendment — 003 is stated as a success rate (2026-09-16)
+
+The client stopped on the third cell: *"we are basically doing AI business
+transformation, and we are telling our client that business transformation doesn't
+work. That is not very smart."*
+
+That is correct and it is a positioning fault, not a wording one. As written, 003 read
+`7 in 10 business transformations fail to deliver what they promised`. The category
+named in that sentence is the category Vectis sells, so the strongest number on the
+page was an argument against buying anything at all. No phrasing of "fail" fixes that.
+
+003 now reads:
+
+> **3 in 10** business transformations hit the goals they set. What separates them is
+> almost never the technology.
+> `MCKINSEY MEASURED ROUGHLY 70% FALLING SHORT. THE RATE HAS HELD FOR DECADES.`
+
+Same source, same research, stated from the other side. The complement of "roughly 70%
+fail" is "roughly 30% succeed", and the basis line prints McKinsey's own number so the
+inversion is visible rather than hidden — the fourth rule doing exactly the work it was
+added for.
+
+The cell now points at the thing Vectis actually sells. The second sentence is the
+whole argument: if what separates the 30% is not the technology, then buying
+technology is not the decision that matters, and working out what to change is. That
+is the discovery call.
+
+**The claim stays inside what the source says.** McKinsey's position is that the root
+causes of failure are consistent and are rarely technological; "what separates them is
+almost never the technology" is that, restated. The stronger sentence available here —
+that what separates them is measuring before building — is *our* claim, not McKinsey's,
+and it belongs in the lede above the grid where it already is, not inside a cited cell.
+
+**Considered and not taken: replacing 003 with the MIT Project NANDA figure** (95% of
+enterprise generative-AI pilots return nothing measurable), recorded in the first
+amendment as still sound. It positions better still, because the thing it indicts is
+the tool-drop pilot rather than transformation work. It was not taken because the
+client asked for aicubed's three figures and this fixes the fault without giving one
+of them up. If 003 is ever revisited, that is the candidate.
